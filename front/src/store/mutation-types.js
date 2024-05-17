@@ -1,0 +1,11 @@
+export const SET_DARK_MODE = "SET_DARK_MODE";
+export const SET_AUTH_TOKEN = "SET_AUTH_TOKEN";
+export const SET_USER = "SET_USER";
+export const SET_INIT = "SET_INIT";
+export const SET_LEVEL = "SET_LEVEL_RANK";
+export const SET_HERO = "SET_HERO_RANK";
+export const SET_REPUT = "SET_REPUT_RANK";
+export const SET_SHOP = "SET_SHOP_LOG";
+export const SET_WHEEL = "SET_WHEEL_LOG";
+export const SET_DONATION = "SET_DONATION_LOG";
+export const SET_RANK = "SET_RANK";
