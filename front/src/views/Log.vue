@@ -28,6 +28,15 @@
                     @click="showDonation"
                     >Donate</a
                 >
+
+                <a
+                    data-toggle="tab"
+                    data-target="#active"
+                    href="javascript:;"
+                    class="py-4 mr-8"
+                    @click="showActive"
+                    >Active</a
+                >
             </div>
         </div>
         <!-- BEGIN: HTML Table Data -->
@@ -52,12 +61,12 @@
                                 v-for="(item, index) in paginatedData"
                                 :key="`item-${index}`"
                             >
-                                <td class="border-b dark:border-dark-5">{{ item.log_date }}</td>
+                                <td class="border-b dark:border-dark-5">{{ new Date(item.date).toLocaleDateString() }}</td>
                                 <td class="border-b dark:border-dark-5">
-                                    {{  item.log_time }}
+                                    {{  getTime(item) }}
                                 </td>
-                                <td class="border-b dark:border-dark-5">{{item.user}}</td>
-                                <td class="border-b dark:border-dark-5">{{  item.log_description }}</td>
+                                <td class="border-b dark:border-dark-5">{{item.account.Name}}</td>
+                                <td class="border-b dark:border-dark-5">{{  item.description }}</td>
                             </tr>
                             <tr class="bg-gray-200 dark:bg-dark-1" v-if="paginatedData.length == 0">
                                 <td colspan="4" class="border-b dark:border-dark-5">There is no matched data!</td>
@@ -146,12 +155,12 @@
                                 v-for="(item, index) in paginatedData"
                                 :key="`item-${index}`"
                             >
-                                <td class="border-b dark:border-dark-5">{{ item.log_date }}</td>
+                                <td class="border-b dark:border-dark-5">{{ new Date(item.date).toLocaleDateString() }}</td>
                                 <td class="border-b dark:border-dark-5">
-                                    {{  item.log_time }}
+                                    {{ getTime(item) }}
                                 </td>
-                                <td class="border-b dark:border-dark-5">{{item.user}}</td>
-                                <td class="border-b dark:border-dark-5">{{  item.log_description }}</td>
+                                <td class="border-b dark:border-dark-5">{{item.account.Name}}</td>
+                                <td class="border-b dark:border-dark-5">{{  item.description }}</td>
                             </tr>
                             <tr class="bg-gray-200 dark:bg-dark-1" v-if="paginatedData.length == 0">
                                 <td colspan="4" class="border-b dark:border-dark-5">There is no matched data!</td>
@@ -220,6 +229,7 @@
                     </div>
                 </div>
             </div>
+            
             <div
                 id="reputation"
                 class="box p-5 mt-5 tab-content__pane"
@@ -239,9 +249,100 @@
                                 v-for="(item, index) in paginatedData"
                                 :key="`item-${index}`"
                             >
-                                <td class="border-b dark:border-dark-5">{{ getDate(item.Date) }}</td>
-                                <td class="border-b dark:border-dark-5">{{item.Time}}</td>
-                                <td class="border-b dark:border-dark-5">{{  item.Amount }}</td>
+                                <td class="border-b dark:border-dark-5">{{ new Date(item.date).toLocaleDateString() }}</td>
+                                <td class="border-b dark:border-dark-5">{{ getTime(item) }}</td>
+                                <td class="border-b dark:border-dark-5">{{ item.Amount }}</td>
+                            </tr>
+                            <tr class="bg-gray-200 dark:bg-dark-1" v-if="paginatedData.length == 0">
+                                <td colspan="3" class="border-b dark:border-dark-5">There is no matched data!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- BEGIN: Pagination -->
+                    <div
+                        v-if="paginatedData.length != 0"
+                        class="flex flex-wrap sm:flex-row sm:flex-no-wrap items-center mt-6 justify-between"
+                    >
+                        <div class="">
+                        Showing {{ (currentPage - 1) * perPage + 1 }} to
+                        {{
+                            currentPage * perPage > data.length
+                            ? data.length
+                            : currentPage * perPage
+                        }}
+                        of {{ data.length }} items
+                        </div>
+                        <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li class="page-item" :class="{ disabled: currentPage == 1 }">
+                            <a class="pagination__link" href="#" @click.prevent="firstPage"
+                                ><ChevronsLeftIcon class="w-4 h-4" /></a
+                            >
+                            </li>
+                            <li class="page-item" :class="{ disabled: currentPage <= 1 }">
+                            <a class="pagination__link" href="#" @click.prevent="prevPage"
+                                ><ChevronLeftIcon class="w-4 h-4" /></a
+                            >
+                            </li>
+                            <li class="page-item" v-for="page in pages" :key="page">
+                            <a
+                                class="pagination__link"
+                                :class="{ 'link-active': currentPage === page }"
+                                href="#"
+                                @click.prevent="setPage(page)"
+                                >{{ page }}</a
+                            >
+                            </li>
+                            <li
+                            class="page-item"
+                            :class="{ disabled: currentPage >= totalPages }"
+                            >
+                            <a class="pagination__link" href="#" @click.prevent="nextPage"
+                                ><ChevronRightIcon class="w-4 h-4" /></a
+                            >
+                            </li>
+                            <li
+                            class="page-item"
+                            :class="{ disabled: currentPage == totalPages }"
+                            >
+                            <a class="pagination__link" href="#" @click.prevent="lastPage"
+                                ><ChevronsRightIcon class="w-4 h-4" /></a
+                            >
+                            </li>
+                        </ul>
+                        </nav>
+                        <!-- <select class="w-20 input box mt-3 sm:mt-0">
+                                    <option>10</option>
+                                    <option>25</option>
+                                    <option>35</option>
+                                    <option>50</option>
+                                </select> -->
+                    </div>
+                </div>
+            </div>
+
+            <div
+                id="active"
+                class="box p-5 mt-5 tab-content__pane"
+            >
+                <div class="overflow-x-auto scrollbar-hidden">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="border-b-2 dark:border-dark-5 w-1/4 text-center whitespace-no-wrap">Date</th>
+                                <th class="border-b-2 dark:border-dark-5 w-1/4 text-center whitespace-no-wrap">Time</th>
+                                <th class="border-b-2 dark:border-dark-5 w-1/4 text-center whitespace-no-wrap">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr 
+                                class="bg-gray-200 dark:bg-dark-1"
+                                v-for="(item, index) in paginatedData"
+                                :key="`item-${index}`"
+                            >
+                                <td class="border-b dark:border-dark-5">{{ new Date(item.date).toLocaleDateString() }}</td>
+                                <td class="border-b dark:border-dark-5">{{ getTime(item)}}</td>
+                                <td class="border-b dark:border-dark-5">{{  item.action }}</td>
                             </tr>
                             <tr class="bg-gray-200 dark:bg-dark-1" v-if="paginatedData.length == 0">
                                 <td colspan="3" class="border-b dark:border-dark-5">There is no matched data!</td>
@@ -333,6 +434,7 @@ export default {
             perPage: 20,
             totalPages: 0,
             pages: [],
+            active:[]
         };
     },
     computed: {
@@ -352,6 +454,12 @@ export default {
         this.getDonation();
     },
     methods: {
+        getTime(item) {
+            const date = new Date(item.date);
+            const formatter = new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit' });
+            const formattedTime = formatter.format(date);
+            return formattedTime;
+        },
         getDate(item) {
             if (!item){
                 return "";
@@ -412,23 +520,31 @@ export default {
             this.generatePages();
         },
         showDonation(){
+            console.log("dontate", this.donation);
             this.data = this.donation;
+            this.totalPages = Math.ceil(this.data.length / this.perPage);
+            this.currentPage = 1;
+            this.generatePages();
+        },
+        showActive(){
+            this.data = this.active;
             this.totalPages = Math.ceil(this.data.length / this.perPage);
             this.currentPage = 1;
             this.generatePages();
         },
         getDonation(){
             let self = this;
-            axios.get('/api/getData',{
+            axios.get('/game/getLogs',{
                 headers:{
                     "Content-Type": "application/json",
-                    token: localStorage.getItem('token'),
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
                 }
             }).then((res)=>{
-                if(res.data.status == "success"){
-                    self.donation = res.data.donation_log;
-                    self.shop = res.data.shop_log;
-                    self.wheel = res.data.wheel_log;
+                if(res.data.message == "success"){
+                    self.donation = res.data.result.donate_log.map(t=>({...t, date: t.Date}));
+                    self.shop = res.data.result.shop_log;
+                    self.wheel = res.data.result.wheel_log;
+                    self.active = res.data.result.active_log;
                 } else {
                     //self.handleError(res);
                 }
@@ -443,7 +559,7 @@ export default {
             this.showData();
         },
         shop(){
-            this.showshop();
+            this.showShop();
             this.generatePages();
         }
     }

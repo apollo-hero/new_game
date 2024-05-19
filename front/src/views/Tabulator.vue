@@ -75,15 +75,7 @@
                                             <img 
                                                 alt="" 
                                                 class="rounded-full" 
-                                                :src="
-                                                    item.Class == 0 && item.Gender == 0 ? `${require('@/assets/items/32000.png')}` :
-                                                    item.Class == 0 && item.Gender == 1 ? `${require('@/assets/items/32020.png')}` :
-                                                    item.Class == 1 && item.Gender == 0 ? `${require('@/assets/items/32040.png')}` :
-                                                    item.Class == 1 && item.Gender == 1 ? `${require('@/assets/items/32060.png')}` :
-                                                    item.Class == 2 && item.Gender == 0 ? `${require('@/assets/items/32080.png')}` :
-                                                    item.Class == 2 && item.Gender == 1 ? `${require('@/assets/items/32100.png')}` :
-                                                    item.Class == 3 && item.Gender == 0 ? `${require('@/assets/items/32120.png')}` : `${require('@/assets/items/32140.png')}`
-                                                "
+                                                :src="getCharacterImage(item)"
                                             >
                                         </div>
                                     </div>
@@ -495,7 +487,7 @@
             </div>
 
             <!-- Monster Table -->
-            <div
+            <!-- <div
                 id="monster"
                 class="box p-5 mt-5 tab-content__pane"
             >
@@ -546,9 +538,9 @@
                                 <td colspan="4" class="border-b dark:border-dark-5">There is no matched data!</td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table> -->
                     <!-- BEGIN: Pagination -->
-                    <div
+                    <!-- <div
                         v-if="paginatedData.length != 0"
                         class="flex flex-wrap sm:flex-row sm:flex-no-wrap items-center mt-6 justify-between"
                     >
@@ -600,16 +592,10 @@
                             </li>
                         </ul>
                         </nav>
-                        <!-- <select class="w-20 input box mt-3 sm:mt-0">
-                                    <option>10</option>
-                                    <option>25</option>
-                                    <option>35</option>
-                                    <option>50</option>
-                                </select> -->
-                    </div>
+                    </div> -->
                     <!-- END: Pagination -->
-                </div>
-            </div>
+                <!-- </div>
+            </div> -->
         </div>
 
         <!-- END: HTML Table Data -->
@@ -641,6 +627,7 @@ export default {
         paginatedData() {
             const from = (this.currentPage - 1) * this.perPage;
             const to = this.currentPage * this.perPage;
+            console.log(this.data.slice(from, to))
             return this.data.slice(from, to);
         },
     },
@@ -652,10 +639,11 @@ export default {
         //this.totalPages = Math.ceil(this.data.length / this.perPage);
         //this.generatePages();
         this.getRank();
-        this.getInitRank();
+        // this.getInitRank();
     },
     methods: {
         generatePages() {
+            console.log('ttt');
             this.pages = [];
 
             for (let i = this.currentPage-2; i <= this.currentPage+2; i++) {
@@ -724,34 +712,28 @@ export default {
         },
         getRank(){
             let self = this;
-            var spinning = setInterval(function(){
-                axios.get(
-                    "/api/getRankLevel",
-                    {
-                    headers: {
-                        "Content-Type": "application/json",
-                        token: localStorage.getItem("token"),
-                    },
-                    }
-                ).then((res)=>{
-                    if(res.data.status == "success!"){
-
-                        self.table = res.data.level_rank;
-                        //self.$store.dispatch("main/setRank", res.data.level_rank);
-                        self.table_hero = res.data.hero_rank;
-                        self.table_reputation = res.data.reput_rank;
-                        self.table_act = res.data.act_rank;
-                        //self.table_monster = res.data.monster_rank;
-                        const filteredCharacters = res.data.level_rank.filter((character) => JSON.parse(character.LifetimeStats).TotalMonstersKilled);
-                        let sortedCharacters = filteredCharacters.sort((a, b) => JSON.parse(b.LifetimeStats).TotalMonstersKilled - JSON.parse(a.LifetimeStats).TotalMonstersKilled);
-                        self.table_monster = sortedCharacters;
-                    } else {
-                        clearInterval(spinning);
-                        self.handleError(res);
-                    }
-                    
-                });
-            },180000);  /// 3 mins
+            axios.get(
+                "/account/leaderboards",{
+                headers:{
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                }
+            }).then((res)=>{
+                if(res.data.message == "success"){
+                    self.table = res.data.result.level_data;
+                    self.table_hero = res.data.result.hero_data;
+                    self.table_reputation = res.data.result.reput_data;
+                    self.data = res.data.result.level_data;
+                    self.table_act = res.data.result.act_rank;
+                    // const filteredCharacters = res.data.result.level_data.filter((character) => JSON.parse(character.LifetimeStats) && JSON.parse(character.LifetimeStats).TotalMonstersKilled);
+                    // let sortedCharacters = filteredCharacters.sort((a, b) => JSON.parse(b.LifetimeStats).TotalMonstersKilled - JSON.parse(a.LifetimeStats).TotalMonstersKilled);
+                    // self.table_monster = sortedCharacters;
+                } else {
+                    clearInterval(spinning);
+                    self.handleError(res);
+                }
+                
+            });
         },
         handleError(res){
             if(res.data.status == 'error' && res.data.message == 'Token expired'){
@@ -760,36 +742,19 @@ export default {
                 })
             }
         },
-        getInitRank(){
-            let self = this;
-            axios.get(
-                    "/api/getRankLevel",
-                    {
-                    headers: {
-                        "Content-Type": "application/json",
-                        token: localStorage.getItem("token"),
-                    },
-                    }
-                ).then((res)=>{
-                    if(res.data.status == "success!"){
 
-                        self.table = res.data.level_rank;
-                        //self.$store.dispatch("main/setRank", res.data.level_rank);
-                        self.table_hero = res.data.hero_rank;
-                        self.table_reputation = res.data.reput_rank;
-                        self.table_act = res.data.act_rank;
-                        //self.table_monster = res.data.monster_rank;
-                            
-                        const filteredCharacters = res.data.level_rank.filter((character) => JSON.parse(character.LifetimeStats).TotalMonstersKilled);
-                        let sortedCharacters = filteredCharacters.sort((a, b) => JSON.parse(b.LifetimeStats).TotalMonstersKilled - JSON.parse(a.LifetimeStats).TotalMonstersKilled);
-                        self.table_monster = sortedCharacters;
+        getCharacterImage(character){
+        let image = character.Class == 0 && character.Gender == 0 ? '32000' :
+                    character.Class == 0 && character.Gender == 1 ? '32020' :
+                    character.Class == 1 && character.Gender == 0 ? '32040' :
+                    character.Class == 1 && character.Gender == 1 ? '32060' :
+                    character.Class == 2 && character.Gender == 0 ? '32080' :
+                    character.Class == 2 && character.Gender == 1 ? '32100' :
+                    character.Class == 3 && character.Gender == 0 ? '32120' : '32140';
 
-                    } else {
-                        self.handleError(res);
-                    }
-                    
-                });
-        }
+        return require(`@/assets/items/${image}.png`);
+    }
+
      },
     watch: {
         currentPage() {

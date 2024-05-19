@@ -17,6 +17,7 @@ import Terms from '../views/Terms';
 import Privacy from '../views/Privacy';
 import Register from '../views/Register';
 import Maintanence from '../views/Maintanence';
+import ServerSetting from '../views/ServerSetting';
 
 Vue.use(VueRouter);
  
@@ -75,6 +76,12 @@ const routes = [
         name: "Settings",
         component: Settings,
         meta: {title: 'zennos - settings'}
+      },
+      {
+        path: "server-settings",
+        name: "Sever-Settings",
+        component: ServerSetting,
+        meta: {title: 'zennos - server-settings'}
       },
       {
         path: "wheel",

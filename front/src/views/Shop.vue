@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-12 gap-6 mt-8">
-    <div v-if="shop_status == 'WORKING'" class="col-span-12 lg:col-span-3 xxl:col-span-2">
+    <div v-if="shop_status" class="col-span-12 lg:col-span-3 xxl:col-span-2">
       <!-- BEGIN: File Manager Menu -->
       <div class="box p-5 mt-6">
         <div class="mt-1" ref="special">
@@ -18,13 +18,13 @@
           Categories
         </div>
         <div class="border-t border-gray-200 dark:border-dark-5 mt-5 pt-5">
-          <div v-for="(c) in categories" v-bind:key="c.categoriesid">
+          <div v-for="(c) in categories" v-bind:key="c.id">
             <input
               v-model="category"
-              :id="c.categoriesid"
+              :id="c.id"
               type="checkbox"
               class="input border mr-2"
-              :value="c.categoriesid"
+              :value="c.id"
             />
             <label
               class="cursor-pointer select-none"
@@ -36,7 +36,7 @@
       </div>
       <!-- END: File Manager Menu -->
     </div>
-    <div v-if="shop_status == 'WORKING'" class="col-span-12 lg:col-span-9 xxl:col-span-10 mb-5 pb-12">
+    <div v-if="shop_status" class="col-span-12 lg:col-span-9 xxl:col-span-10 mb-5 pb-12">
       <!-- BEGIN: Directory & Files -->
       <div class="grid grid-cols-12 gap-3 sm:gap-6 mt-5">
         <div
@@ -57,7 +57,7 @@
               <div class="">
                 <img
                   alt="Midone Tailwind HTML Admin Template"
-                  :src="require(`@/assets/items/${item.image}.png`)"
+                  :src="require(`@/assets/items/${item.iconId}.png`)"
                   style="width:36px; height:36px; margin:auto;"
                 />
               </div>
@@ -145,12 +145,12 @@
           <div class="flex col-span-12 items-center">
             <img
               v-if="item.name"
-              :src="require(`@/assets/items/${item.image}.png`)"
+              :src="require(`@/assets/items/${item.iconId}.png`)"
               style="width:36px; height:36px;"
               class="flex items-center left"
             />
             <div class="items-center ml-3 mt-5">
-              {{ item.description }}
+              {{ item.desc }}
               <div class="col-span-12 sm:col-span-12 flex">
                 <label></label>
                 <span>{{ item.price * quantity }}</span>
@@ -233,7 +233,7 @@ export default {
       perPage: 24,
       totalPages: 0,
       pages: [],
-      shop_status: "WORKING"
+      shop_status: true
     };
   },
   computed: {
@@ -245,11 +245,11 @@ export default {
             -1
         );
       } else if (!this.search_text && this.category.length > 0) {
-        return this.data.filter((item) => this.category.includes(item.categoriesid));
+        return this.data.filter((item) => this.category.includes(item.categoryId));
       } else if (this.search_text && this.category) {
         return this.data.filter(
           (item) =>
-          this.category.includes(item.categoriesid) &&
+          this.category.includes(item.categoryId) &&
             item.name.toLowerCase().indexOf(this.search_text.toLowerCase()) !==
               -1
         );
@@ -265,27 +265,26 @@ export default {
   },
   mounted() {
     this.getCategories();
-    // this.getShopItems();
     this.getCharacters();
     this.getShopItems();
     this.getBalance();
+    this.shop_status = this.$store.state.main.init.store_status;
   },
   methods: {
     getCategories() {
       let self = this;
       axios
-        .get("/api/getCategories", {
+        .get("/game/getCategories", {
           headers: {
             "Content-Type": "application/json",
-            token: localStorage.getItem("token"),
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         })
         .then((res) => {
-          if(res.data.status == "error"){
-            self.handleError(res);
+          if(res.data.message == "success"){
+            self.categories = res.data.result.categories;
           } else {
-            self.categories = res.data.categories;
-            self.shop_status = res.data.shop_status;
+            self.handleError(res);
           }
         });
     },
@@ -293,15 +292,15 @@ export default {
     getShopItems(page) {
       let self = this;
       axios
-        .get("/api/getShopItems", {
+        .get("/game/getShopItems", {
           headers: {
             "Content-Type": "application/json",
-            token: localStorage.getItem("token"),
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         })
         .then((res) => {
-          if(res.data.status == "success"){
-            self.data = res.data.shopItems;
+          if(res.data.message == "success"){
+            self.data = res.data.result.shop_items;
             self.totalPages = Math.ceil(this.filteredData.length / this.perPage);
             self.generatePages();
           } else {
@@ -318,21 +317,7 @@ export default {
 
     getCharacters() {
       let self = this;
-      axios
-        .get("/api/getCharacters", {
-          headers: {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          if(res.data.status == "success"){
-            self.characters = res.data.characters;
-          } else {
-            self.handleError(res);
-          }
-          
-        });
+      self.characters = self.$store.state.main.user.characters;
     },
 
     buy() {
@@ -381,27 +366,30 @@ export default {
 
       self.loading = true;
 
-      axios.post(
-        "/api/buyItem",
-        {
-          pro_id: self.item.productid,
-          quantity: self.quantity,
-          character: self.character,
-          total_price: self.item.price * self.quantity,
-          vnum: self.item.vnum
-        },
-        {
+      axios.post("/game/buyItem", {
+        orderData: [
+          {
+            "itemId": self.item.vnum,
+            "quantity": self.quantity,
+            "character": self.character,
+          }
+        ],
+        totalPrice: self.item.price * self.quantity,
+      },
+      {
           headers: {
             "Content-Type": "application/json",
-            token: localStorage.getItem("token"),
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         }
-      ).then((res)=>{
+      
+      )
+      .then((res)=>{
         self.loading = false;
-        // document.getElementById("buy_modal").;
-        if(res.data.status == "success!"){
+        if(res?.data && res?.data?.message ==='success'){
+
           Toastify({
-            text: res.data.message,
+            text: res.data.response,
             duration: 3000,
             newWindow: true,
             close: false,
@@ -410,11 +398,13 @@ export default {
             backgroundColor: "#2af109",
             stopOnFocus: true
           }).showToast();
-          this.$store.dispatch("main/setUser", res.data.user);
-          this.$store.dispatch("main/setShop", res.data.shop_log);
-        } else {
+
+          this.$store.dispatch('main/getAccount')
+        }
+        else{
+          console.log("error");
           Toastify({
-            text: res.data.message,
+            text: res.data.response,
             duration: 3000,
             newWindow: true,
             close: false,
@@ -424,7 +414,6 @@ export default {
             stopOnFocus: true
           }).showToast();
         }
-        
       });
     },
 
@@ -468,23 +457,9 @@ export default {
       }
     },
     getBalance(){
-            let self = this;
-          //  var spinning = setInterval(function(){
-                axios.get('/api/getUser',{
-                    headers:{
-                        "Content-Type": "application/json",
-                        token: localStorage.getItem('token'),
-                    }
-                }).then((res)=>{
-                    if(res.data.status == "error"){
-                        clearInterval(spinning);
-                        self.handleError(res);
-                    } else {
-                        self.$store.dispatch("main/setUser", res.data.user);
-                    }
-                })
-           // },15000);  // 5s
-        }
+      let self = this;
+      self.$store.dispatch("main/getAccount");
+    }
   },
   watch: {
     filteredData() {

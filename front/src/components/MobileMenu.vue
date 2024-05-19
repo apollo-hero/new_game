@@ -138,7 +138,7 @@ export default {
   },
   mounted() {
     this.formattedMenu = this.$h.assign(this.mobileMenu);
-    this.site_name = this.$store.state.main.init[0].site_name;
+    this.site_name = this.$store.state.main.init.site_name;
   },
   methods: {
     toggleMobileMenu() {

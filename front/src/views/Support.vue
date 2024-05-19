@@ -36,26 +36,13 @@ components: {
 },
 data() {
     return {
-    salesReportFilter: "",
     discordLink: ''
     };
 },
 mounted(){
-  this.getDiscordLink();
+  this.discordLink = this.$store.state.main.init.discord;
 },  
 methods: {
-  getDiscordLink(){
-    let self = this;
-    axios.get('/api/getDiscordLink',{
-                headers:{
-                    "Content-Type": "application/json",
-                    token: localStorage.getItem('token'),
-                }
-            })
-      .then((res)=>{
-        self.discordLink = res.data.discordLink;
-      })
-  }
 }
 };
 </script>

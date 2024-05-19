@@ -119,7 +119,7 @@ const updatePassword = async (req, res) => {
 
 const leaderboards = async (req, res) => {
     const level_data = await characters.findAll({
-        attributes: ['Name', 'Level', 'Class', 'Gender'],
+        attributes: ['Name', 'Level', 'Class', 'Gender', 'LifetimeStats'],
         order: [
             ['Level', 'DESC'],
         ],
@@ -164,9 +164,25 @@ const leaderboards = async (req, res) => {
                 }
               }
         }]
+    })   
+    
+    const act_data = await characters.findAll({
+        attributes: ['Name', 'Reput', 'Class', 'Gender','Act4Kill'],
+        order: [
+            ['Act4Kill', 'DESC'],
+        ],
+        include: [{
+            model: users,
+            attributes: ['Authority'],
+            where: {
+                Authority: {
+                  [Op.not]: 30000
+                }
+              }
+        }]
     })    
 
-    return ResponseData.ok(res, '', { level_data: level_data, hero_data: hero_data, reput_data: reput_data });
+    return ResponseData.ok(res, '', { level_data: level_data, hero_data: hero_data, reput_data: reput_data, act_data:act_data });
 }
 
 module.exports = {

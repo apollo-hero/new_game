@@ -48,22 +48,8 @@ data() {
     };
 },
 mounted(){
-  this.getLinks();
+  this.download_64 = this.$store.state.main.init.x64_download;
+  this.download_86 = this.$store.state.main.init.x86_download;
 },
-methods: {
-  getLinks(){
-    let self = this;
-    axios.get('/api/getLinks',{
-                headers:{
-                    "Content-Type": "application/json",
-                    token: localStorage.getItem('token'),
-                }
-            })
-      .then((res)=>{
-        self.download_64 = res.data.download_64;
-        self.download_86 = res.data.download_86;
-      })
-  }
-}
 };
 </script>

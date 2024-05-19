@@ -62,14 +62,14 @@ const actions = {
     commit(types.SET_RANK, data);
   },
   login({commit}, credentials) {
-    return axios.post('/api/login', credentials)
+    return axios.post('/account/login', credentials)
         .then(response => {
           
-            if(response.data.status == "success" && response.data.init[0].site_status_register == "WORKING"){
-              commit(types.SET_AUTH_TOKEN, response.data.token);
-              commit(types.SET_USER, response.data.user);
-              commit(types.SET_INIT, response.data.init);
-              localStorage.setItem('token', response.data.token);
+            if(response.data.message == "success"){
+              commit(types.SET_AUTH_TOKEN, response.data.result.token);
+              commit(types.SET_USER, response.data.result.user);
+              commit(types.SET_INIT, response.data.result.data);
+              localStorage.setItem('token', response.data.result.token);
             }
             console.log(response);
             return response;
@@ -109,6 +109,21 @@ const actions = {
           }
           return res;
         })
+  },
+  getAccount({commit}) {
+    return axios.get('/account/my-account',{
+      headers:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+      }
+    })
+    .then((res)=>{
+      if(res.data.message == "success"){
+        commit(types.SET_USER, res.data.result.user);
+        commit(types.SET_INIT, res.data.result.data);
+      }
+      return res;
+    })
   }
 };
 

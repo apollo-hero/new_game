@@ -132,10 +132,42 @@ const updateSetting = async (req, res) => {
  
 const getLogs = async (req, res) => {
     try {
-        const donate_log = await PaymentWebModel.findAll({ where: { PayerID: req.user.Id}, include: [UserModel]}); 
-        const shop_log = await ShopLogModel.findAll({ where: { user_id: req.user.Id}, include: [UserModel]}); 
-        const wheel_log = await WheelLogModel.findAll({ where: { user_id: req.user.Id}, include: [UserModel]}); 
-        const active_log = await ActiveLogModel.findAll({ where: { user_id: req.user.Id}, include: [UserModel]}); 
+        const donate_log = await PaymentWebModel.findAll({ where: { PayerID: req.user.Id}, include: [{
+            model: UserModel,
+            attributes: ['Authority','Name'],
+            where: {
+                Authority: {
+                  [Op.not]: 30000
+                }
+              }
+        }]}); 
+        const shop_log = await ShopLogModel.findAll({ where: { user_id: req.user.Id}, include: [{
+            model: UserModel,
+            attributes: ['Authority','Name'],
+            where: {
+                Authority: {
+                  [Op.not]: 30000
+                }
+              }
+        }]}); 
+        const wheel_log = await WheelLogModel.findAll({ where: { user_id: req.user.Id}, include: [{
+            model: UserModel,
+            attributes: ['Authority','Name'],
+            where: {
+                Authority: {
+                  [Op.not]: 30000
+                }
+              }
+        }]}); 
+        const active_log = await ActiveLogModel.findAll({ where: { user_id: req.user.Id}, include: [{
+            model: UserModel,
+            attributes: ['Authority','Name'],
+            where: {
+                Authority: {
+                  [Op.not]: 30000
+                }
+              }
+        }]}); 
          
         ResponseData.ok(res, "Game logs", { donate_log: donate_log, shop_log: shop_log, wheel_log: wheel_log, active_log: active_log}); 
     } catch (err) { 

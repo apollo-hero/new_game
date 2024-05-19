@@ -252,30 +252,36 @@ export default {
                 password: self.password
             }).then((res) => {
                 console.log(res);
-                if(res.data.status == "success"){
-                    
-                    if(res.data.init[0].site_status_register == "WORKING"){
-                        Toastify({
-                            text: res.data.message,
-                            duration: 3000,
-                            newWindow: true,
-                            close: false,
-                            gravity: "bottom",
-                            position: "center",
-                            backgroundColor: "#2af109",
-                            stopOnFocus: true
-                        }).showToast();
-                        
-                        self.$router.push({
-                            name: 'Dashboard'
-                        });
-                    } else {
-                        self.$router.push({
-                            name: 'maintanence'
-                        });
-                    }
+                if(res.data.message == "success"){
+
+                    Toastify({
+                        text: res.data.response,
+                        duration: 3000,
+                        newWindow: true,
+                        close: false,
+                        gravity: "bottom",
+                        position: "center",
+                        backgroundColor: "#2af109",
+                        stopOnFocus: true
+                    }).showToast();
+
+                    self.$router.push({
+                        name: 'Dashboard'
+                    });
+                  
                 } else {
-                    self.login_failed = true;
+                    // self.login_failed = true;
+
+                    Toastify({
+                        text: res.data.response,
+                        duration: 3000,
+                        newWindow: true,
+                        close: false,
+                        gravity: "bottom",
+                        position: "center",
+                        backgroundColor: "#e80404",
+                        stopOnFocus: true
+                    }).showToast();
                 }
                 
             })

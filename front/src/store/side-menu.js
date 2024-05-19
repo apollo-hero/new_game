@@ -38,6 +38,11 @@ const state = () => {
         title: "Settings"
       },
       {
+        icon: "SettingsIcon",
+        pageName: "Sever-Settings",
+        title: "Server-Settings"
+      },
+      {
         icon: "FileTextIcon",
         pageName: "Logs",
         title: "Logs"

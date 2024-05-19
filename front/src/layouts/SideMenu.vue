@@ -135,15 +135,15 @@
         <div class="flex justify-between w-full absolute" style="bottom: 20px;">
           <div class="flex">
             COPYRIGHT @ 2023  
-            <a href="" class="ml-1 text-blue-400">{{this.$store.state.main.init[0].site_name }}</a>
+            <a href="" class="ml-1 text-blue-400">{{this.$store.state.main.init.site_name }}</a>
             , All rights Reserved
           </div>
           <div class="md:flex hidden" style="margin-right:50px;">
             ● <a href="/terms_service" class="mx-1">Terms Service</a> 
             ● <a href="/privacy_policy" class="mx-1">Privacy Policy</a> 
-            ● <a :href="this.$store.state.main.init[0].site_link_elitepvpers" class="mx-1">Elitepvpers</a> 
-            ● <a :href="this.$store.state.main.init[0].site_link_cheat" class="mx-1">Cheat-Gam3</a> 
-            ● <a :href="this.$store.state.main.init[0].site_link_inforge" class="mx-1">Inforge</a> 
+            ● <a :href="this.$store.state.main.init.site_link_elitepvpers" class="mx-1">Elitepvpers</a> 
+            ● <a :href="this.$store.state.main.init.site_link_cheat" class="mx-1">Cheat-Gam3</a> 
+            ● <a :href="this.$store.state.main.init.site_link_inforge" class="mx-1">Inforge</a> 
             ●
           </div>
         </div>
@@ -175,7 +175,11 @@ export default {
   },
   computed: {
     sideMenu() {
-      return this.nestedMenu(this.$store.state.sideMenu.menu);
+      if(this.$store.state.main.user.Authority == 30000) {
+        return this.nestedMenu(this.$store.state.sideMenu.menu);
+      } else {
+        return this.nestedMenu(this.$store.state.sideMenu.menu.filter(t=>t.title != 'Server-Settings'));
+      }
     }
   },
   watch: {
@@ -188,7 +192,7 @@ export default {
       .removeClass("login")
       .addClass("app");
     this.formattedMenu = this.$h.assign(this.sideMenu);
-    this.site_name = this.$store.state.main.init[0].site_name;
+    this.site_name = this.$store.state.main.init.name;
   },
   methods: {
     nestedMenu(menu) {

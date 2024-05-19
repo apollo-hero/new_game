@@ -158,9 +158,10 @@ export default {
         };
     },
     mounted(){
-        this.getCharacters();
-        this.init();
-        this.getBalance();
+        this.characters = this.$store.state.main.user.characters.filter(t=>!t.DeletedAt);
+        // this.getCharacters();
+        // this.init();
+        // this.getBalance();
     },
     methods: {
         prevImportantNotes() {
@@ -171,7 +172,7 @@ export default {
         },
         init(){
             let self = this;
-            axios.get('/api/getData',{
+            axios.get('/game/getData',{
                 headers:{
                     "Content-Type": "application/json",
                     token: localStorage.getItem('token'),

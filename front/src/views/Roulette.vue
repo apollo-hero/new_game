@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="wheel_status == 'WORKING'" class="grid grid-cols-12 gap-6 mt-5">
+    <div v-if="wheel_status" class="grid grid-cols-12 gap-6 mt-5">
       <div class="col-span-12 lg:col-span-6">
         <!-- BEGIN: Form Layout -->
         <div class="box p-5">
@@ -47,24 +47,24 @@
 
           <div class="items-center pt-3">
             <label>Select your jackpot</label>
-            <v-select v-model="jackpot" :options="jackpots" label="Name" style="background-color: #232a3b">
+            <v-select v-model="jackpot" :options="jackpots" label="name" style="background-color: #232a3b">
               <template slot="option" slot-scope="option">
                 <div class="flex items-center">
-                  <img :src="require(`@/assets/items/${option.image}.png`)" class="mr-2">
-                  {{ option.Name }}
+                  <img :src="getImageSrc(option.iconId)" class="mr-2">
+                  {{ option.name }}
                 </div>
               </template>
 
               <template slot="selected-option" slot-scope="option">
                 <div class="flex items-center">
-                  <img :src="require(`@/assets/items/${option.image}.png`)" class="mr-2">
-                  <span>{{ option.Name }}</span>
+                  <img :src="getImageSrc(option.iconId)" class="mr-2">
+                  <span>{{ option.name }}</span>
                 </div>
               </template>
             </v-select>
           </div>
 
-          <div class="items-center pt-3">
+          <!-- <div class="items-center pt-3">
             <label>Select your characters</label>
             <select v-model="character" class="input w-full border mt-2 flex-1">
               <option
@@ -74,6 +74,25 @@
                 >{{ t.Name }}</option
               >
             </select>
+          </div> -->
+
+          <div class="items-center pt-3">
+            <label>Select your characters</label>
+            <v-select v-model="character" :options="characters" label="Name" style="background-color: #232a3b">
+              <template slot="option" slot-scope="option">
+                <div class="flex items-center">
+                  <img :src="getCharacterImage(option)" class="mr-2" width="35">
+                  {{ option.Name }}
+                </div>
+              </template>
+
+              <template slot="selected-option" slot-scope="option">
+                <div class="flex items-center">
+                  <img :src="getCharacterImage(option)" class="mr-2" width="35">
+                  <span>{{ option.Name }}</span>
+                </div>
+              </template>
+            </v-select>
           </div>
         </div>
 
@@ -126,13 +145,13 @@
           </div>
 
           <div class="items-center pt-3 flex-auto">
-            <div v-for="item, index in items" :key="index" class="inline-flex m-1">
+            <div v-for="(item, index) in items" :key="index" class="inline-flex m-1">
                 <img
-                    :alt="item.Name"
-                    :src="require(`@/assets/items/${item.image}.png`)"
+                    :alt="item.name"
+                    :src="getImageSrc(item.iconId)"
                     style="width:45px; height:45px;"
                     class="tooltip"
-                    :title="item.Name + ' ' + item.Amount"
+                    :title="item.name + ' ' + item.amount"
                 />
             </div>
           </div>
@@ -170,72 +189,63 @@ export default {
         drawn_reward: null,
         amount: null,
         vnum: null,
-        html: null,
+        html: '',
         degree: 0,
         ticks: 0,
         tick_delay: 66.25,
         tick_sound: null,
-        wheel_status: "WORKING"
+        wheel_status: true
     };
   },
   mounted(){
     this.getJackpots();
-    this.getCharacters();
     this.getItems();
     this.tick_sound = new Audio(require('@/assets/sound/tick.mp3'));
     this.getBalance();
+    this.wheel_status = this.$store.state.main.init.roulette_status;
+    this.double_jackpot = this.$store.state.main.init.jackpot_status;
+    this.characters = this.$store.state.main.user.characters.filter(t=>!t.DeletedAt);
   },
   methods: {
+    getImageSrc(iconId) {
+      try {
+        return require(`@/assets/items/${iconId}.png`);
+      } catch (e) {
+        console.error(`Image not found for iconId: ${iconId}`);
+        return ''; // Return a placeholder or empty string if image not found
+      }
+    },
     getJackpots(){
         let self = this;
-        axios.get('/api/getJackPots',{
+        axios.get('/game/getJackpots',{
             headers:{
                 "Content-Type": "application/json",
-                token: localStorage.getItem("token"),
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             }
         })
             .then((res)=>{
-              if(res.data.status == "success"){
-                self.jackpots = res.data.jackpots;
-                self.wheel_status = res.data.wheel_status;
-                self.double_jackpot = res.data.double_jackpot == 1 ? true : false;
+              if(res.data.message == "success"){
+                self.jackpots = res.data.result.jackpots;
+                // self.double_jackpot = res.data.double_jackpot == 1 ? true : false;
               } else {
 
               }
             })
     },
 
-    getCharacters() {
-      let self = this;
-      axios
-        .get("/api/getCharacters", {
-          headers: {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("token"),
-          },
-        })
-        .then((res) => {
-          if(res.data.status == "success"){
-            self.characters = res.data.characters;
-          } else {
-            self.handleError(res);
-          }
-          
-        });
-    },
-
     getItems(){
         let self = this;
         axios
-            .get("/api/getItems", {
+            .get("/game/getItems", {
             headers: {
                 "Content-Type": "application/json",
-                token: localStorage.getItem("token"),
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
             })
             .then((res) => {
-            if(res.data.status == "success"){
-                self.items = res.data.items;
+            if(res.data.message == "success"){
+                console.log('tt');
+                self.items = res.data.result.items;
             } else {
                 self.handleError(res);
             }
@@ -280,20 +290,22 @@ export default {
 
       if(self.status == 0){
         self.status = 1;
-        axios.post('/api/getRoulette',{
-          jackpot: self.jackpot.ID,
-          character: self.character
+        axios.post('/game/getWheelItems',{
+          doubleJackpot: self.$store.state.main.init.jackpot_status,
+          jackpot: self.jackpot.id,
+          character: self.character.Id,
         },{
           headers:{
             "Content-Type": "application/json",
-            token: localStorage.getItem("token"),
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           }
         }).then((res)=>{
-          if(res.data.status == "error"){
+          if(res.data.message == "error"){
             self.handleError(res);
-          } else if(res.data.status == "warning"){
+          } else if(res.data.message == "warning"){
+            self.$store.dispatch("main/getAccount");
             Toastify({
-              text: res.data.message,
+              text: res.data.response,
               duration: 3000,
               newWindow: true,
               close: false,
@@ -302,101 +314,31 @@ export default {
               backgroundColor: "#e80404",
               stopOnFocus: true
             }).showToast();
-          } else if(res.data.status == "success") {
+            self.status = 0;
+          } else if(res.data.message == "success") {
 
-            self.$store.dispatch("main/setUser", res.data.user);
-            self.$store.dispatch("main/setWheel", res.data.roulette_log);
-            self.reward_id = res.data.reward;
-            const items = res.data.items;
-            self.double_jackpot = res.data.jackpot.length == 2 ? true : false;
+            self.$store.dispatch("main/getAccount");
+            self.reward_id = res.data.result.reward.id;
+            const items = res.data.result.wheel_items;
+            self.double_jackpot = self.$store.state.main.init.jackpot_status;
 
             for (let index = 0; index < items.length; index++) {
-                if(items[index].ID == self.reward_id){
-                    if(res.data.jackpot.length == 1){
-                        self.target = index+1;
-                        self.drawn_reward = index+1;
-                        self.vnum = items[index].VNUM;
-                        self.amount = items[index].Amount;
-                    } else {
-                        if(index<7){
-                            self.target = index+1;
-                            self.drawn_reward = index+1;
-                            self.vnum = items[index].VNUM;
-                            self.amount = items[index].Amount;
-                        } else {
-                            self.target = index+2;
-                            self.drawn_reward = index+2;
-                            self.vnum = items[index].VNUM;
-                            self.amount = items[index].Amount;
-                        }
-                    }
-                    
+                if(items[index].id == self.reward_id){
+                  self.drawn_reward = index;
+                  self.target = res.data.result.target;
+                  self.vnum = items[index].VNUM;
+                  self.amount = items[index].Amount;
                 }                        
             }
 
-            if(res.data.jackpot[0].ID == self.reward_id){
-                self.target = 0;
-                self.drawn_reward = 0;
-                self.vnum = res.data.jackpot[0].VNUM;
-                self.amount = res.data.jackpot[0].Amount;
-            } else if (res.data.jackpot.length == 2 && res.data.jackpot[1].ID == self.reward_id){
-                self.target = 8;
-                self.drawn_reward = 8;
-                self.vnum = res.data.jackpot[1].VNUM;
-                self.amount = res.data.jackpot[1].Amount;
-            }
-
-             self.html = '<div class="wheel-rewards-slot jackpot opacity1" style="top:' + postions[0].top + 'px; left:' + postions[0].left + 'px;">';
+            for (let i = 0; i < 16; i++) {
+                self.html += '<div class="wheel-rewards-slot jackpot opacity1" style="top:' + postions[i].top + 'px; left:' + postions[i].left + 'px;">';
                 self.html +=    '<div class="wheel-rewards-group">';
                 self.html +=       '<div class="nt-item-small">';
-                self.html +=         `<img src="${require("@/assets/items/" + res.data.jackpot[0].image + ".png")}" />`;
+                self.html +=         `<img src="${self.getImageSrc(items[i].iconId)}" />`;
                 self.html +=       '</div>';
                 self.html +=     '</div>';
-                self.html += '</div>';
-                
-            if(res.data.jackpot.length != 2){
-                for (let i = 0; i < 15; i++) {
-                    self.html += '<div class="wheel-rewards-slot jackpot opacity1" style="top:' + postions[i+1].top + 'px; left:' + postions[i+1].left + 'px;">';
-                    self.html +=    '<div class="wheel-rewards-group">';
-                    self.html +=       '<div class="nt-item-small">';
-                    self.html +=         `<img src="${require("@/assets/items/" + items[i].image + ".png")}" />`;
-                    self.html +=       '</div>';
-                    self.html +=     '</div>';
-                    self.html += '</div>';    
-                }
-            } else {
-                for (let i = 0; i < 14; i++) {
-                    if(i<7){
-                        self.html += '<div class="wheel-rewards-slot jackpot opacity1" style="top:' + postions[i+1].top + 'px; left:' + postions[i+1].left + 'px;">';
-                        self.html +=    '<div class="wheel-rewards-group">';
-                        self.html +=       '<div class="nt-item-small">';
-                        self.html +=         `<img src="${require("@/assets/items/" + items[i].image + ".png")}" />`;
-                        self.html +=       '</div>';
-                        self.html +=     '</div>';
-                        self.html += '</div>';    
-                    } 
-                    
-                    if(i==7){
-                        self.html += '<div class="wheel-rewards-slot jackpot opacity1" style="top:' + postions[8].top + 'px; left:' + postions[8].left + 'px;">';
-                        self.html +=    '<div class="wheel-rewards-group">';
-                        self.html +=       '<div class="nt-item-small">';
-                        self.html +=         `<img src="${require("@/assets/items/" + res.data.jackpot[1].image + ".png")}" />`;
-                        self.html +=       '</div>';
-                        self.html +=     '</div>';
-                        self.html += '</div>';
-                    }
-                    
-                    if(i >= 7) {
-                        self.html += '<div class="wheel-rewards-slot jackpot opacity1" style="top:' + postions[i+2].top + 'px; left:' + postions[i+2].left + 'px;">';
-                        self.html +=    '<div class="wheel-rewards-group">';
-                        self.html +=       '<div class="nt-item-small">';
-                        self.html +=         `<img src="${require("@/assets/items/" + items[i].image + ".png")}" />`; 
-                        self.html +=       '</div>';
-                        self.html +=     '</div>';
-                        self.html += '</div>';    
-                    }
-                    
-                }
+                self.html += '</div>';    
             }
 
             self.start_pin();
@@ -489,33 +431,46 @@ export default {
     },
 
     bounce_won(element) {
-      console.log(element.height);
-      var diff_height = element.height * 0.8;
-      var diff_width = element.width * 0.8;
-      var width = element.width;
-      var height = element.height;
+      console.log(element);
+      var old_width = element.width;
+      var old_height = element.height;
 
-      
-      for(var i = 0; i < 3; i++) {
-        console.log(element.height);
-          width = width + diff_width/(i+1);
-          height = height + diff_height/(i+1);
-          element.animate({
-              width: width + "px",
-              height: height + "px",
-              maxWidth: width + "px",
-              maxHeight: height + "px"
-          },200)
-          width = width - diff_width/(i+1);
-          height = height - diff_height/(i+1);
-          element.animate({
-              width: width + "px",
-              height: height + "px",
-              maxWidth: width + "px",
-              maxHeight: height+ "px"
-          },200)
+      let scale = 1;
+      let isGrowing = true;
+      const maxScale = 2;
+      const growthSpeed = 0.1;
+      let repetitions = 0;
+      const totalRepetitions = 3;
+
+      function animateImage() {
+          if (isGrowing) {
+              scale += growthSpeed;
+          } else {
+              scale -= growthSpeed;
+          }
+
+          if (scale >= maxScale) {
+              isGrowing = false;
+          }
+
+          // element.width = old_width * scale;
+          // element.height = old_height * scale;
+          element.style = "scale: " + scale;
+
+          if (scale <= 1) {
+              repetitions++;
+
+              if (repetitions === totalRepetitions) {
+                  clearInterval(animation);
+              } else {
+                  scale = 1;
+                  isGrowing = true;
+              }
+          }
       }
-      
+
+      const animation = setInterval(animateImage, 50);
+
       Toastify({
         text: "Wheel Reward sent, please relog in game to receive your items",
         duration: 3000,
@@ -529,23 +484,21 @@ export default {
     },
 
     getBalance(){
-            let self = this;
-           // var spinning = setInterval(function(){
-                axios.get('/api/getUser',{
-                    headers:{
-                        "Content-Type": "application/json",
-                        token: localStorage.getItem('token'),
-                    }
-                }).then((res)=>{
-                    if(res.data.status == "error"){
-                        // clearInterval(spinning);
-                        self.handleError(res);
-                    } else {
-                        self.$store.dispatch("main/setUser", res.data.user);
-                    }
-                })
-           // },15000); 
-        }
+      let self = this;
+      self.$store.dispatch("main/getAccount");
+    },
+
+    getCharacterImage(character){
+        let image = character.Class == 0 && character.Gender == 0 ? '32000' :
+                    character.Class == 0 && character.Gender == 1 ? '32020' :
+                    character.Class == 1 && character.Gender == 0 ? '32040' :
+                    character.Class == 1 && character.Gender == 1 ? '32060' :
+                    character.Class == 2 && character.Gender == 0 ? '32080' :
+                    character.Class == 2 && character.Gender == 1 ? '32100' :
+                    character.Class == 3 && character.Gender == 0 ? '32120' : '32140';
+
+        return require(`@/assets/items/${image}.png`);
+    }
   }
 };
 </script>
