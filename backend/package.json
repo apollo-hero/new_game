@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon  server.js"
+    "dev": "nodemon  server.js",
+    "start": "node  server.js"
   },
   "keywords": [
     "express",
@@ -39,6 +40,7 @@
     "request": "^2.88.2",
     "sequelize": "^6.20.1",
     "socket.io": "^4.5.1",
+    "sqlite3": "^5.1.6",
     "stripe": "^14.23.0",
     "uuid": "^9.0.1",
     "ws": "^8.8.0"

@@ -317,7 +317,7 @@ export default {
 
     getCharacters() {
       let self = this;
-      self.characters = self.$store.state.main.user.characters;
+      self.characters = self.$store.state.main.user.characters.filter(t=>!t.DeletedAt);
     },
 
     buy() {
@@ -414,6 +414,9 @@ export default {
             stopOnFocus: true
           }).showToast();
         }
+      })
+      .catch(function(error) {
+        console.log(error);          
       });
     },
 

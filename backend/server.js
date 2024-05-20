@@ -13,6 +13,8 @@ const stripe = require('stripe')('sk_test_51P1NhQP8bC8pI0cCopNmUPCGVEkEIjPY5JZj5
 const pool = require('./config/db.config'); 
 
 const GameController = require('./controllers/GameController');
+
+const ErrorMiddleware = require('./middleware/ErrorMiddleware');
  
 require('dotenv').config(); 
  

@@ -4,6 +4,7 @@ import main from "./main";
 import sideMenu from "./side-menu";
 import simpleMenu from "./simple-menu";
 import topMenu from "./top-menu";
+import items from "./items";
 import PersistedState from "vuex-persistedstate";
 import SecureLS from "secure-ls";
 
@@ -37,6 +38,7 @@ export default new Vuex.Store({
     main: main,
     sideMenu: sideMenu,
     simpleMenu: simpleMenu,
-    topMenu: topMenu
+    topMenu: topMenu,
+    items:items
   }
 });

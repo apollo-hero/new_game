@@ -744,16 +744,16 @@ export default {
         },
 
         getCharacterImage(character){
-        let image = character.Class == 0 && character.Gender == 0 ? '32000' :
-                    character.Class == 0 && character.Gender == 1 ? '32020' :
-                    character.Class == 1 && character.Gender == 0 ? '32040' :
-                    character.Class == 1 && character.Gender == 1 ? '32060' :
-                    character.Class == 2 && character.Gender == 0 ? '32080' :
-                    character.Class == 2 && character.Gender == 1 ? '32100' :
-                    character.Class == 3 && character.Gender == 0 ? '32120' : '32140';
+            let image = character.Class == 0 && character.Gender == 0 ? '32000' :
+                        character.Class == 0 && character.Gender == 1 ? '32020' :
+                        character.Class == 1 && character.Gender == 0 ? '32040' :
+                        character.Class == 1 && character.Gender == 1 ? '32060' :
+                        character.Class == 2 && character.Gender == 0 ? '32080' :
+                        character.Class == 2 && character.Gender == 1 ? '32100' :
+                        character.Class == 3 && character.Gender == 0 ? '32120' : '32140';
 
-        return require(`@/assets/items/${image}.png`);
-    }
+            return require(`@/assets/items/${image}.png`);
+        }
 
      },
     watch: {

@@ -66,7 +66,16 @@
                                     {{  getTime(item) }}
                                 </td>
                                 <td class="border-b dark:border-dark-5">{{item.account.Name}}</td>
-                                <td class="border-b dark:border-dark-5">{{  item.description }}</td>
+                                <td class="border-b dark:border-dark-5 flex justify-center items-center" v-if="item.description">
+                                    <!-- {{ item.description }} -->
+                                    {{ item.description.split("-")[0] }}
+                                    <img
+                                        alt="item"
+                                        v-if="item.description.split('-')[1]"
+                                        :src="require(`@/assets/items/` + item.description.split('-')[1] + `.png`)"
+                                        style="width:36px; height:36px; margin:auto;"
+                                    />
+                                </td>
                             </tr>
                             <tr class="bg-gray-200 dark:bg-dark-1" v-if="paginatedData.length == 0">
                                 <td colspan="4" class="border-b dark:border-dark-5">There is no matched data!</td>
@@ -160,7 +169,16 @@
                                     {{ getTime(item) }}
                                 </td>
                                 <td class="border-b dark:border-dark-5">{{item.account.Name}}</td>
-                                <td class="border-b dark:border-dark-5">{{  item.description }}</td>
+                                <td class="border-b dark:border-dark-5 flex justify-center items-center" v-if="item.description">
+                                    <!-- {{  item.description }} -->
+                                    {{ item.description.split("-")[0] }}
+                                    <img
+                                        alt="item"
+                                        v-if="item.description.split('-')[1]"
+                                        :src="require(`@/assets/items/` + item.description.split('-')[1] + `.png`)"
+                                        style="width:36px; height:36px; margin:auto;"
+                                    />
+                                </td>
                             </tr>
                             <tr class="bg-gray-200 dark:bg-dark-1" v-if="paginatedData.length == 0">
                                 <td colspan="4" class="border-b dark:border-dark-5">There is no matched data!</td>

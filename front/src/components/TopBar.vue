@@ -39,14 +39,16 @@
         >
           <div class="p-2">
             <a
-              href = "/"
-              class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md"
+              href="javascript:;"
+              @click="linkTo('Dashboard')"
+              class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md pointer"
             >
               <UserIcon class="w-4 h-4 mr-2" /> Profile
             </a>
             <a
-              href = "/settings"
-              class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md"
+              href="javascript:;"
+              @click="linkTo('Settings')"
+              class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md pointer"
             >
               <LockIcon class="w-4 h-4 mr-2" /> Settings
             </a>
@@ -86,6 +88,11 @@ export default {
     },
     hideSearchDropdown() {
       this.searchDropdown = false;
+    },
+    linkTo(page){
+      this.$router.push({
+        name: page
+      });
     }
   }
 };

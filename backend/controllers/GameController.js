@@ -132,42 +132,112 @@ const updateSetting = async (req, res) => {
  
 const getLogs = async (req, res) => {
     try {
-        const donate_log = await PaymentWebModel.findAll({ where: { PayerID: req.user.Id}, include: [{
-            model: UserModel,
-            attributes: ['Authority','Name'],
-            where: {
-                Authority: {
-                  [Op.not]: 30000
-                }
-              }
-        }]}); 
-        const shop_log = await ShopLogModel.findAll({ where: { user_id: req.user.Id}, include: [{
-            model: UserModel,
-            attributes: ['Authority','Name'],
-            where: {
-                Authority: {
-                  [Op.not]: 30000
-                }
-              }
-        }]}); 
-        const wheel_log = await WheelLogModel.findAll({ where: { user_id: req.user.Id}, include: [{
-            model: UserModel,
-            attributes: ['Authority','Name'],
-            where: {
-                Authority: {
-                  [Op.not]: 30000
-                }
-              }
-        }]}); 
-        const active_log = await ActiveLogModel.findAll({ where: { user_id: req.user.Id}, include: [{
-            model: UserModel,
-            attributes: ['Authority','Name'],
-            where: {
-                Authority: {
-                  [Op.not]: 30000
-                }
-              }
-        }]}); 
+        const user = req.user;
+        let donate_log = [], shop_log = [], wheel_log = [], active_log = [];
+        if(user.Authority == 30000){
+            donate_log = await PaymentWebModel.findAll({ 
+                where: { PayerID: req.user.Id}, 
+                include: [{
+                    model: UserModel,
+                    attributes: ['Authority','Name'],
+                }],
+                order: [
+                    ['Date', 'DESC'],
+                ]
+            }); 
+            shop_log = await ShopLogModel.findAll({ 
+                where: { user_id: req.user.Id}, 
+                include: [{
+                    model: UserModel,
+                    attributes: ['Authority','Name'],
+                }],
+                order: [
+                    ['date', 'DESC'],
+                ],
+            }); 
+            wheel_log = await WheelLogModel.findAll({ 
+                where: { user_id: req.user.Id}, 
+                include: [{
+                    model: UserModel,
+                    attributes: ['Authority','Name'],
+                }],
+                order: [
+                    ['date', 'DESC'],
+                ],
+            }); 
+            active_log = await ActiveLogModel.findAll({ 
+                where: { user_id: req.user.Id}, 
+                include: [{
+                    model: UserModel,
+                    attributes: ['Authority','Name'],
+                }],
+                order: [
+                    ['date', 'DESC'],
+                ]
+            }); 
+        } else {
+            donate_log = await PaymentWebModel.findAll({ 
+                where: { PayerID: req.user.Id}, 
+                include: [{
+                    model: UserModel,
+                    attributes: ['Authority','Name'],
+                    where: {
+                        Authority: {
+                        [Op.not]: 30000
+                        }
+                    }
+                }],
+                order: [
+                    ['Date', 'DESC'],
+                ],
+            }); 
+            shop_log = await ShopLogModel.findAll({ 
+                where: { user_id: req.user.Id}, 
+                include: [{
+                    model: UserModel,
+                    attributes: ['Authority','Name'],
+                    where: {
+                        Authority: {
+                        [Op.not]: 30000
+                        }
+                    }
+                }],
+                order: [
+                    ['date', 'DESC'],
+                ],
+            }); 
+            wheel_log = await WheelLogModel.findAll({ 
+                where: { user_id: req.user.Id}, 
+                include: [{
+                    model: UserModel,
+                    attributes: ['Authority','Name'],
+                    where: {
+                        Authority: {
+                        [Op.not]: 30000
+                        }
+                    }
+                }],
+                order: [
+                    ['date', 'DESC'],
+                ]
+        }); 
+            active_log = await ActiveLogModel.findAll({ 
+                where: { user_id: req.user.Id}, 
+                include: [{
+                    model: UserModel,
+                    attributes: ['Authority','Name'],
+                    where: {
+                        Authority: {
+                        [Op.not]: 30000
+                        }
+                    }
+                }],
+                order: [
+                    ['date', 'DESC'],
+                ],
+            }); 
+        }
+        
          
         ResponseData.ok(res, "Game logs", { donate_log: donate_log, shop_log: shop_log, wheel_log: wheel_log, active_log: active_log}); 
     } catch (err) { 
@@ -274,7 +344,7 @@ const sendItem = async (vnum, amount, character, user) => {
      
         let send_amount = amount; 
      
-        const description = "Bought from Shop: VNum:" + vnum + "x" + send_amount; 
+        const description = "Bought from Shop: VNum:" + vnum + "x" + send_amount + "-" + item.iconId;  
      
         const shop_log = await ShopLogModel.create({ 
             user_id: user.Id, 
@@ -345,9 +415,12 @@ const getWheelItems = async (req, res) => {
                 common = await convertDate(common); 
 
             } else { 
-                jackpots = await WheelItemModel.findAll({ where: { rare: 0, id: jackpot } });        
+                jackpots = await WheelItemModel.findAll({ where: { rare: 0, id: jackpot } }); 
+
                 jackpots = await convertDate(jackpots);  
+
                 common = await WheelItemModel.findAll({ order: literal('RANDOM()'), limit: 10, where: { rare: 2} }); 
+                
                 common = await convertDate(common); 
             } 
          
@@ -542,7 +615,7 @@ const sendWheelItem = async (vnum, amount, character, user) => {
     
         let send_amount = amount; 
     
-        const description = "Bought from Wheel: VNum:" + vnum + "x" + send_amount; 
+        const description = "Bought from Wheel: VNum:" + vnum + "x" + send_amount + "-" + item.iconId; 
     
         const shop_log = await WheelLogModel.create({ 
             user_id: user.Id, 
