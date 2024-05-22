@@ -99,9 +99,9 @@
                         </label
                         >
                         </div>
-                        <div class="flex justify-center">
+                        <div class="flex justify-center" v-if="capchakey">
                             <vue-recaptcha
-                                sitekey="6LeWAO4lAAAAAHfC83S8PKH-jOANIv5YCEMFnMxP"
+                                :sitekey="capchakey"
                                 theme="dark"
                                 style="display: flex; justify-content: center; height: 78px; margin-top: 10px;"
                                 @verify="verify"
@@ -313,7 +313,8 @@ export default {
         cheat: "",
         info: '',
         discord: '',
-        ragezone: ''
+        ragezone: '',
+        capchakey: ''
         }
     },
     computed: {
@@ -403,16 +404,15 @@ export default {
                 return;
             }
             axios
-                .post("/api/register", {
-                username: self.username,
+                .post("/account/register", {
+                fullName: self.username,
                 email: self.register_email,
                 password: self.register_password,
-                confirm_password: self.confirm_password
                 })
                 .then(function(response) {
-                if(response.data.status == "success"){
+                if(response.data.message == "success"){
                     Toastify({
-                        text: response.data.message,
+                        text: response.data.response,
                         duration: 3000,
                         newWindow: true,
                         close: false,
@@ -426,7 +426,7 @@ export default {
                     });
                 } else {
                     Toastify({
-                        text: response.data.message,
+                        text: response.data.response,
                         duration: 3000,
                         newWindow: true,
                         close: false,
@@ -474,14 +474,15 @@ export default {
 
         getLinks(){
             let self = this;
-            axios.get('/api/getSocialLinks')
+            axios.get('/game/getData')
                 .then((res)=>{
-                    self.elite = res.data.elite;
-                    self.cheat = res.data.cheat;
-                    self.info = res.data.inforge;
-                    self.discord = res.data.discord;
-                    self.ragezone = res.data.rage;
-                    self.$store.dispatch("main/setInit", res.data.data);
+                    self.elite = res.data.result.elite;
+                    // self.cheat = res.data.cheat;
+                    self.info = res.data.result.inforge;
+                    self.discord = res.data.result.discord;
+                    self.ragezone = res.data.result.ragezone;
+                    self.capchakey = res.data.result.captcha_key;
+                    // self.$store.dispatch("main/setInit", res.data.data);
                 });
         }
     },
