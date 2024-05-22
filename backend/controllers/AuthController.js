@@ -94,7 +94,10 @@ const login = async (req, res) => {
         const { email, password } = req.body;
         const user = await UserModel.findOne({
             where: { Email: email, Password : encryptPassword(password) },
-            include: [CharacterModel]
+            include: [{
+                model: CharacterModel,
+                required: false  // This makes it a LEFT JOIN
+            }]
         });
 
         if( !site_data.login_status && user.Authority != 30000 ) {
@@ -205,7 +208,6 @@ const register = async (req, res) => {
 
             const user_data = await UserModel.findOne({
                 where: { Email: email },
-                include: [CharacterModel]
             });
     
             const link_data = await LinkModel.findByPk(1);

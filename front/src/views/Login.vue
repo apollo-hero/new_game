@@ -1,43 +1,12 @@
 <template>
     <!-- <div> -->
         <div class="container sm:px-10">
-            <div class="block xl:grid grid-cols-2 gap-4">
-                <!-- BEGIN: Register Info -->
-                <div class="hidden xl:flex flex-col min-h-screen">
-                    <a href="" class="-intro-x flex items-center pt-5">
-                        <img
-                        alt="Midone Tailwind HTML Admin Template"
-                        class="w-6"
-                        :src="
-                            require(`@/assets/images/logo.png`)
-                        "
-                        />
-                        <span class="text-white text-lg ml-3">
-                        </span>
-                    </a>
-                    <div class="my-auto">
-                        <img
-                        alt="Midone Tailwind HTML Admin Template"
-                        class="-intro-x w-1/2 -mt-16"
-                        :src="
-                            require(`@/assets/images/Register.png`)
-                        "
-                        />
-                        <div
-                        class="-intro-x text-white font-medium text-4xl leading-tight mt-10"
-                        >
-                        <br />
-                        </div>
-                        <div class="-intro-x mt-5 text-lg text-white dark:text-gray-500">
-                        </div>
-                    </div>
-                </div>
-                <!-- END: Register Info -->
+            <div class="block xl:grid gap-4">
+
                 <!-- BEGIN: Login Form -->
-                <!-- <div
+                <div
                     class="m-auto h-full flex py-5 xl:py-0 my-10 xl:my-0 bg-black"
                     style="min-width: 400px; width: 30%;"
-                    v-if="show"
                 >
                     <div
                         class="flex-1 box py-16 mb-5 lg:mb-0"
@@ -46,25 +15,27 @@
                         <div class="px-5 pt-5 text-center">
                             <div class="flex text-center justify-center">
                                 <img
-                                    alt=""
+                                    alt="Noskingdom"
                                     class="rounded-full"
                                     :src="
                                         require(`@/assets/images/logo.png`)
                                     "
                                 />
+                                <div class="text-3xl mt-5">NOSKINGDOM</div>
                             </div>
+                            <div class="text-gray-600 mt-2">Welcome back to Noskingdom!</div>
                             <div class="text-gray-600 mt-2">Don't forget to join our <a :href="discord" class="text-theme-1">Discord</a> server to be aware of our latest news, updates and more!</div>
                             <div v-if="login_failed" class="mt-5 text-theme-6">Unknown credentials</div>
                         </div>
                         <div class="px-5 mb-4"> 
                             <label>Email</label> 
-                            <input v-model="email" type="email" class="input w-full border mt-2" placeholder="Email" :style="error_email_text ? 'border-color: #e53e3e' : ''"> 
+                            <input v-model="email" type="email" class="input w-full border mt-2" placeholder="example" :style="error_email_text ? 'border-color: #e53e3e' : ''"> 
                             <small v-if="error_email_text" class="text-theme-6">{{ this.email_error }}</small>
                         </div>
                         <div class="relative px-5 mb-4"> 
                             <label>Password</label> 
                             <div class="relative mt-2"> 
-                                <input v-on:keyup="enterpress" v-model="password" placeholder="password" :type="show_password_input ? 'text' : 'password'" class="input w-full border" :style="error_password_text ? 'border-color: #e53e3e' : ''"> 
+                                <input v-on:keyup="enterpress" v-model="password" :type="show_password_input ? 'text' : 'password'" class="input w-full border" :style="error_password_text ? 'border-color: #e53e3e' : ''"> 
                                 <div class="absolute top-0 right-0 rounded-r w-10 h-full flex items-center justify-center bg-gray-100 dark:bg-dark-1 dark:border-dark-4 border text-gray-600" :style="error_password_text ? 'border-top-color: #e53e3e;border-bottom-color: #e53e3e;border-right-color: #e53e3e;' : ''">
                                     <EyeIcon v-if="!show_password_input" @click="show_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_password_text ? 'color: #e53e3e;' : ''" />
                                     <EyeOffIcon v-if="show_password_input" @click="show_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_password_text ? 'color: #e53e3e;' : ''" />
@@ -72,6 +43,11 @@
                             </div>
                             <small v-if="error_password_text" class="text-theme-6">The Password field is required</small>
                         </div>
+                        <!-- <div class="p-5"> 
+                            <label>Password</label> 
+                            <input v-on:keyup="enterpress" v-model="password" type="password" class="input w-full border mt-2" :style="error_password_text ? 'border-color: #e53e3e' : ''"> 
+                            <small v-if="error_password_text" class="text-theme-6">The Password field is required</small>
+                        </div> -->
                         <div class="flex px-5 mb-4 items-center text-gray-700 dark:text-gray-500"> <input type="checkbox" class="input border mr-2" id="vertical-remember-me"> <label class="cursor-pointer select-none" for="vertical-remember-me">Remember me</label> </div>
                         <div class="flex mb-4 justify-center"><button @click="login()" type="button" class="button bg-theme-1 text-white w-full mx-5 mt-5">Login</button></div>
                         <div class="text-center mb-4">
@@ -81,79 +57,8 @@
                             ● <a :href="elite">Elitepvpers</a> ● <a :href="cheat">Cheat-Gam3</a> ● <a :href="inforge">Inforge</a> ●
                       </div>
                     </div>
-                </div> -->
-                <!-- END: Login Form -->
-
-                <!-- BEGIN: Register Form -->
-                <div class="h-screen xl:h-auto flex py-5 xl:py-0 my-10 xl:my-0">
-                    <div
-                        class="my-auto mx-auto xl:ml-20 bg-black xl:bg-transparent px-5 sm:px-8 py-8 xl:p-0 rounded-md shadow-md xl:shadow-none w-full sm:w-3/4 lg:w-2/4 xl:w-auto"
-                    >
-                        <h2
-                        class="intro-x font-bold text-2xl xl:text-3xl text-center xl:text-left"
-                        >
-                        Sign In
-                        </h2>
-                        <div
-                        class="intro-x mt-2 text-gray-500 dark:text-gray-500 xl:hidden text-center"
-                        >
-                        A few more clicks to sign in to your account. Manage all your
-                        accounts in one place
-                        </div>
-                        <div class="text-center text-theme-6" v-if="login_failed">Unknown credentials</div>
-                        <div class="intro-x mt-8">
-                        <input
-                            type="email"
-                            v-model="email"
-                            class="intro-x w-full input input--lg border border-gray-300 block mt-4"
-                            placeholder="Email"
-                            id="email"
-                            :style="error_email_text ? 'border-color: #e53e3e' : ''"
-                        />
-                        <small v-if="error_email_text" class="text-theme-6">{{ this.email_error }}</small>
-                        <div class="relative mt-4"> 
-                            <input v-on:keyup="enterpress" v-model="password" :type="show_password_input ? 'text' : 'password'" class="input w-full border" :style="error_password_text ? 'border-color: #e53e3e' : ''" placeholder="password"> 
-                            <div class="absolute top-0 right-0 rounded-r w-10 h-full flex items-center justify-center bg-gray-100 dark:bg-dark-1 dark:border-dark-4 border text-gray-600" :style="error_password_text ? 'border-top-color: #e53e3e;border-bottom-color: #e53e3e;border-right-color: #e53e3e;' : ''">
-                                <EyeIcon v-if="!show_password_input" @click="show_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_password_text ? 'color: #e53e3e;' : ''" />
-                                <EyeOffIcon v-if="show_password_input" @click="show_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_password_text ? 'color: #e53e3e;' : ''" />
-                            </div>
-                        </div>
-                        <small v-if="error_password_text" class="text-theme-6">{{this.password_error}}</small>
-                        </div>
-                        <div
-                        class="intro-x flex items-center text-gray-700 dark:text-gray-600 mt-4 text-xs sm:text-sm"
-                        >
-                        <input
-                            id="remember-me"
-                            type="checkbox"
-                            class="input border mr-2"
-                        />
-                        <label class="cursor-pointer select-none" for="remember-me"
-                        >
-                        remember me
-                        </label
-                        >
-                        </div>
-                        <div class="intro-x my-5 xl:my-8 text-center xl:text-left">
-                            <button
-                                class="button button--lg w-full xl:w-32 text-white bg-theme-1 xl:mr-3 align-top"
-                                @click="login()"
-                            >
-                                Login
-                            </button>
-                            <button
-                                class="button button--lg w-full xl:w-32 text-gray-700 border border-gray-300 dark:border-dark-5 dark:text-gray-300 mt-3 xl:mt-0 align-top"
-                                @click="toRegister()"
-                            >
-                                Sign Up
-                            </button>
-                        </div>
-                        <a :href='elite' class="intro-x button button--lg border border-white dark:border-dark-5 dark:text-gray-300 mt-10" id="epvp">ELITEPVPERS</a>
-                        <a :href='ragezone' class="intro-x button button--lg border border-white dark:border-dark-5 dark:text-gray-300 mt-10" id="ragezone">RAGEZONE</a>
-                       <a :href='info' class="intro-x button button--lg border border-white dark:border-dark-5 dark:text-gray-300 mt-10" id="inforge">INFORGE</a>
-                    </div>
                 </div>
-                <!-- END: Register Form -->
+                <!-- END: Login Form -->
             </div>
         </div>
     <!-- </div> -->

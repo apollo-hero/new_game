@@ -724,7 +724,7 @@ export default {
                     self.table_hero = res.data.result.hero_data;
                     self.table_reputation = res.data.result.reput_data;
                     self.data = res.data.result.level_data;
-                    self.table_act = res.data.result.act_rank;
+                    self.table_act = res.data.result.act_data;
                     // const filteredCharacters = res.data.result.level_data.filter((character) => JSON.parse(character.LifetimeStats) && JSON.parse(character.LifetimeStats).TotalMonstersKilled);
                     // let sortedCharacters = filteredCharacters.sort((a, b) => JSON.parse(b.LifetimeStats).TotalMonstersKilled - JSON.parse(a.LifetimeStats).TotalMonstersKilled);
                     // self.table_monster = sortedCharacters;
