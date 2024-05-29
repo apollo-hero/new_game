@@ -71,7 +71,6 @@ const actions = {
               commit(types.SET_INIT, response.data.result.data);
               localStorage.setItem('token', response.data.result.token);
             }
-            console.log(response);
             return response;
         });
   },

@@ -244,7 +244,6 @@ export default {
             })
             .then((res) => {
             if(res.data.message == "success"){
-                console.log('tt');
                 self.items = res.data.result.items;
             } else {
                 self.handleError(res);
@@ -370,7 +369,6 @@ export default {
 
     start_pin(){
       let self = this;
-      console.log("start_pin");
       self.drawn_reward += 4; //
       if (self.drawn_reward > 15){self.drawn_reward -= 16;}
       self.status = 1;
@@ -431,7 +429,6 @@ export default {
     },
 
     bounce_won(element) {
-      console.log(element);
       var old_width = element.width;
       var old_height = element.height;
 

@@ -627,7 +627,6 @@ export default {
         paginatedData() {
             const from = (this.currentPage - 1) * this.perPage;
             const to = this.currentPage * this.perPage;
-            console.log(this.data.slice(from, to))
             return this.data.slice(from, to);
         },
     },
@@ -643,7 +642,6 @@ export default {
     },
     methods: {
         generatePages() {
-            console.log('ttt');
             this.pages = [];
 
             for (let i = this.currentPage-2; i <= this.currentPage+2; i++) {

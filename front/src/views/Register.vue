@@ -287,7 +287,6 @@ export default {
         },
         
         verify(){
-            console.log("verfy", this.capcha);
             this.capcha = true;
         }, 
 

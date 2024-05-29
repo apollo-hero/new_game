@@ -71,12 +71,7 @@ const jwtsign = (payload) => {
 
 const checkPassword = (userPassword, storedHashedPassword) => {
     // Hash the provided password
-    const hashedPassword = encryptPassword(userPassword);
-
-    //Good to give it out big kappa
-    console.log(hashedPassword);
-    console.log(storedHashedPassword);
-    
+    const hashedPassword = encryptPassword(userPassword);    
     // Compare the hashed passwords
     return hashedPassword === storedHashedPassword;
 }
@@ -174,8 +169,6 @@ const register = async (req, res) => {
     }
     try {
         const { email, password,fullName } = req.body; 
-
-        console.log(req.body, '----------------');
 
         const users = await UserModel.findAll();
 

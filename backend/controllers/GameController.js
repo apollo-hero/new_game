@@ -456,7 +456,7 @@ const getWheelItems = async (req, res) => {
                 } 
             } 
          
-            let vnum = reward.vnum; console.log('vnum', vnum, reward);
+            let vnum = reward.vnum;
             let item = await WheelItemModel.findOne({ where: { vnum: vnum }}); 
          
             let amount = item.amount; 
@@ -857,7 +857,7 @@ const webhook = async (req, res) => {
             const lineItems = sessionWithLineItems.line_items;
 
             // Fulfill the purchase...
-            console.log('=====================================',sessionWithLineItems, lineItems);
+            // console.log('=====================================',sessionWithLineItems, lineItems);
 
             const check = await PaymentWebModel.findOne({where: {TransactionID: sessionWithLineItems.id}});
 

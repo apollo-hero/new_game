@@ -103,7 +103,7 @@ export default {
 
         elite: "",
         cheat: "",
-        info: '',
+        inforge: '',
         discord: '',
         ragezone: ''
         }
@@ -144,7 +144,7 @@ export default {
             document.location.href = this.ragezone;
         },
         toInforge() {
-            document.location.href = this.info;
+            document.location.href = this.inforge;
         },
         login() {
             let self = this;
@@ -156,7 +156,6 @@ export default {
                 email: self.email,
                 password: self.password
             }).then((res) => {
-                console.log(res);
                 if(res.data.message == "success"){
 
                     Toastify({
@@ -258,7 +257,6 @@ export default {
         },
         
         verify(){
-            console.log("verfy", this.capcha);
             this.capcha = true;
         }, 
 
@@ -270,10 +268,9 @@ export default {
             let self = this;
             axios.get('/game/getData')
                 .then((res)=>{
-                    console.log(res);
                     self.elite = res.data.result.elite;
                     // self.cheat = res.data.result.cheat;
-                    self.info = res.data.result.inforge;
+                    self.inforge = res.data.result.inforge;
                     self.discord = res.data.result.discord;
                     self.ragezone = res.data.result.rage;
                     self.$store.dispatch("main/setInit", res.data.result.data);

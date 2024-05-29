@@ -155,7 +155,6 @@
               // window.open(res?.data.result.url, '_blank', 'noreferrer');
               document.location.href = res.data.result.url;
           } else{
-              console.log("error");
               Toastify({
                 text: "The coins is not enough!",
                 duration: 3000,

@@ -538,7 +538,6 @@ export default {
             this.generatePages();
         },
         showDonation(){
-            console.log("dontate", this.donation);
             this.data = this.donation;
             this.totalPages = Math.ceil(this.data.length / this.perPage);
             this.currentPage = 1;

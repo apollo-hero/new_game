@@ -402,7 +402,6 @@ export default {
           this.$store.dispatch('main/getAccount')
         }
         else{
-          console.log("error");
           Toastify({
             text: res.data.response,
             duration: 3000,
@@ -449,7 +448,6 @@ export default {
       }
     },
     searchCategory(id) {
-      console.log(id);
       this.category = id;
     },
     handleError(res){

@@ -33,7 +33,6 @@ const amount = async (req, res) => {
                 return ResponseData.ok(res, 'Token expired and get new token', { token: newToken, amount: user.balance });
             }
             else {
-                console.log(decoded);
                 return ResponseData.ok(res, 'Token valid', { token, amount: user.balance });
             }
         })
