@@ -23,8 +23,8 @@ module.exports = (sequelize) => {
             // avatar: { type: DataTypes.STRING, defaultValue: `/assets/avatars/avatar-${Math.floor(Math.random() * 10)}.png` },
             Rare_Pity: { type: DataTypes.INTEGER, defaultValue: 0 },
 
-            CreatedAt: { type: DataTypes.DATE, defaultValue: new Date(Date.now()) },
-            UpdatedAt: { type: DataTypes.DATE, defaultValue: new Date(Date.now()) }, 
+            CreatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
+            UpdatedAt: { type: DataTypes.DATE, defaultValue: new Date() }, 
             DeletedAt: { type: DataTypes.DATE},
  
         }, {

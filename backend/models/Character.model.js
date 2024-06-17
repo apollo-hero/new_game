@@ -103,9 +103,9 @@ module.exports = (sequelize) => {
             //BattlePassQuestDto: { type: DataTypes.JSONB },
             //MaxStarTrainerDto: { type: DataTypes.JSONB },
             //TrainerQuestDto: { type: DataTypes.JSONB },
-            CreatedAt: { type: DataTypes.DATE, defaultValue: new Date(Date.now())},
-            UpdatedAt: { type: DataTypes.DATE, defaultValue: new Date(Date.now())},
-            DeletedAt: { type: DataTypes.DATE, defaultValue: new Date(Date.now())},
+            CreatedAt: { type: DataTypes.DATE, defaultValue: new Date()},
+            UpdatedAt: { type: DataTypes.DATE, defaultValue: new Date()},
+            DeletedAt: { type: DataTypes.DATE, defaultValue: new Date()},
         }, {
         timestamps: false,
         schema: "characters"

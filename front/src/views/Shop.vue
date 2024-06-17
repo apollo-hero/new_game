@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-12 gap-6 mt-8">
+  <div class="grid grid-cols-12 gap-6 mt-8 shop">
     <div v-if="shop_status" class="col-span-12 lg:col-span-3 xxl:col-span-2">
       <!-- BEGIN: File Manager Menu -->
       <div class="box p-5 mt-6">
@@ -83,18 +83,19 @@
       <!-- END: Directory & Files -->
       <!-- BEGIN: Pagination -->
       <div
-        class="flex flex-wrap sm:flex-row sm:flex-no-wrap items-center mt-6 justify-between"
+        class="flex flex-wrap sm:flex-row sm:flex-no-wrap items-center mt-6 justify-between absolute" style="bottom: 50px; width: 80%"
       >
-        <div class="">
-          Showing {{ (currentPage - 1) * perPage + 1 }} to
-          {{
-            currentPage * perPage > filteredData.length
-              ? filteredData.length
-              : currentPage * perPage
-          }}
-          of {{ filteredData.length }} items
-        </div>
-        <nav aria-label="Page navigation">
+        <div class="shop-footer w-full flex justify-between">
+          <div class="">
+            Showing {{ (currentPage - 1) * perPage + 1 }} to
+            {{
+              currentPage * perPage > filteredData.length
+                ? filteredData.length
+                : currentPage * perPage
+            }}
+            of {{ filteredData.length }} items
+          </div>
+          <nav aria-label="Page navigation">
           <ul class="pagination">
             <li class="page-item" :class="{ disabled: currentPage <= 1 }">
               <a class="pagination__link" href="#" @click.prevent="prevPage"
@@ -119,7 +120,8 @@
               >
             </li>
           </ul>
-        </nav>
+          </nav>
+        </div>
         <!-- <select class="w-20 input box mt-3 sm:mt-0">
                     <option>10</option>
                     <option>25</option>
@@ -478,3 +480,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+  .shop {
+    height: calc(100% - 70px)
+  }
+  .shop-footer {
+    display: "flex"
+  }
+</style>
