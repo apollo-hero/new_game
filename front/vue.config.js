@@ -5,22 +5,13 @@ const { styles } = require("@ckeditor/ckeditor5-dev-utils");
 
 module.exports = {
   lintOnSave: false,
-  //   devServer: {
-  //   proxy: {
-  //     "/api": {
-  //       target: 'http://localhost/nosback/public',
-  //       changeOrigin: true,
-  //       ws: true, 
-  //     }
-  //   }
-  // },
   configureWebpack: {
     plugins: [
       new webpack.ProvidePlugin({
         cash: "cash-dom"
       }),
       new CKEditorWebpackPlugin({
-        language: "en",
+							 language: "en",
         translationsOutputFile: /app/
       })
     ]

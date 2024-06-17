@@ -16,8 +16,8 @@ Vue.config.productionTip = false;
 
 Vue.component('v-select', vSelect)
 
-// const baseURL = `https://nzennos.com/nosback/public`;
-const baseURL = `http://localhost:8000`;
+const baseURL = `https://api.noszelda.eu`;
+//const baseURL = `http://localhost:8000`;
 
 const token = localStorage.getItem('token');
 

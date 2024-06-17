@@ -23,13 +23,12 @@
                       <input type="hidden" name="item_number" :value="coin.CoinsId"> -->
                       <button @click="handleDonate(coin.Price * (1 - init.coin_discount/100),coin.CoinId)">
                       <div class="flex">
-                        <div class="text-3xl font-bold leading-8">{{ coin.Price }}</div>
-                        <div class="report-box__icon text-theme-10 flex items-end ml-2">{{ init.site_paypal_currency }}</div>
+                        <div class="text-3xl font-bold leading-8">{{ coin.Price }}€</div>
+                        <div class="report-box__icon text-theme-10 flex items-end ml-2"></div>
                         <div class="ml-auto">
                           <Tippy
                             tag="div"
                             class="report-box__indicator bg-theme-9 cursor-pointer"
-                            content="33% Higher than last month"
                           >
                           {{coin.BonusCoins/coin.Coins*100}}% <ChevronUpIcon class="w-4 h-4" />
                           </Tippy>
@@ -55,8 +54,8 @@
                       <input type="hidden" name="item_number" :value="coin.CoinsId"> -->
                       <button @click="handleDonate(coin.Price * (1 - init.coin_discount/100),coin.CoinId)">
                         <div class="flex">
-                          <div class="text-3xl font-bold leading-8 line-through">{{ coin.Price }}</div>
-                          <div class="report-box__icon text-theme-10 flex items-end ml-2 line-through">{{ init.site_paypal_currency }}</div>
+                          <div class="text-3xl font-bold leading-8 line-through">{{ coin.Price }}€</div>
+                          <div class="report-box__icon text-theme-10 flex items-end ml-2 line-through"></div>
                           <div class="ml-auto">
                             <Tippy
                               tag="div"
