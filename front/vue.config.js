@@ -19,10 +19,10 @@ module.exports = {
       new webpack.ProvidePlugin({
         cash: "cash-dom"
       }),
-      new CKEditorWebpackPlugin({
-        language: "en",
-        translationsOutputFile: /app/
-      })
+      // new CKEditorWebpackPlugin({
+      //   language: "en",
+      //   translationsOutputFile: /app/
+      // })
     ]
   },
   transpileDependencies: [/ckeditor5-[^/\\]+[/\\]src[/\\].+\.js$/],
