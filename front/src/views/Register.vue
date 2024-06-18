@@ -38,7 +38,7 @@
                         <div class="relative px-5 mb-4"> 
                             <label>Password</label> 
                             <div class="relative mt-2"> 
-                                <input v-model="register_password" :type="show_register_password_input ? 'text' : 'password'" class="input w-full border" :style="error_register_password_text ? 'border-color: #e53e3e' : ''"> 
+                                <input v-model="register_password" placeholder="***" :type="show_register_password_input ? 'text' : 'password'" class="input w-full border" :style="error_register_password_text ? 'border-color: #e53e3e' : ''"> 
                                 <div class="absolute top-0 right-0 rounded-r w-10 h-full flex items-center justify-center bg-gray-100 dark:bg-dark-1 dark:border-dark-4 border text-gray-600" :style="error_register_password_text ? 'border-top-color: #e53e3e;border-bottom-color: #e53e3e;border-right-color: #e53e3e;' : ''">
                                     <EyeIcon v-if="!show_register_password_input" @click="show_register_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_register_password_text ? 'color: #e53e3e;' : ''" />
                                     <EyeOffIcon v-if="show_register_password_input" @click="show_register_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_register_password_text ? 'color: #e53e3e;' : ''" />

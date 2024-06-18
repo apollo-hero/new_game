@@ -29,13 +29,13 @@
                         </div>
                         <div class="px-5 mb-4"> 
                             <label>Email</label> 
-                            <input v-model="email" type="email" class="input w-full border mt-2" placeholder="example" :style="error_email_text ? 'border-color: #e53e3e' : ''"> 
+                            <input v-model="email" type="email" class="input w-full border mt-2" placeholder="example@gmail.com" :style="error_email_text ? 'border-color: #e53e3e' : ''"> 
                             <small v-if="error_email_text" class="text-theme-6">{{ this.email_error }}</small>
                         </div>
                         <div class="relative px-5 mb-4"> 
                             <label>Password</label> 
                             <div class="relative mt-2"> 
-                                <input v-on:keyup="enterpress" v-model="password" :type="show_password_input ? 'text' : 'password'" class="input w-full border" :style="error_password_text ? 'border-color: #e53e3e' : ''"> 
+                                <input v-on:keyup="enterpress" v-model="password" placeholder="***" :type="show_password_input ? 'text' : 'password'" class="input w-full border" :style="error_password_text ? 'border-color: #e53e3e' : ''"> 
                                 <div class="absolute top-0 right-0 rounded-r w-10 h-full flex items-center justify-center bg-gray-100 dark:bg-dark-1 dark:border-dark-4 border text-gray-600" :style="error_password_text ? 'border-top-color: #e53e3e;border-bottom-color: #e53e3e;border-right-color: #e53e3e;' : ''">
                                     <EyeIcon v-if="!show_password_input" @click="show_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_password_text ? 'color: #e53e3e;' : ''" />
                                     <EyeOffIcon v-if="show_password_input" @click="show_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_password_text ? 'color: #e53e3e;' : ''" />
