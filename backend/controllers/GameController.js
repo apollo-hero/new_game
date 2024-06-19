@@ -58,7 +58,9 @@ const updateSetting = async (req, res) => {
             return ResponseData.error(res, 'Not registered token & user',); 
         } 
  
-        const control = await ControlModel.findByPk(1); 
+        const control = await ControlModel.findOne({
+            order: [['id', 'ASC']]
+        });
         if( !control ) { 
             const control = new ControlModel(); 
             control.name = req.body.site_name; 
@@ -100,7 +102,10 @@ const updateSetting = async (req, res) => {
             await control.save(); 
         } 
  
-        const link = await LinkModel.findByPk(1); 
+        const link = await LinkModel.findOne({
+            order: [['id', 'ASC']]
+        });
+        
         if(!link){ 
             const link = new LinkModel(); 
             link.x64_download = req.body.x64_download_link; 
@@ -594,8 +599,14 @@ const convertDate = async ( data ) => {
 } 
  
 const getData = async (req, res) => { 
-    const links = await LinkModel.findByPk(1); 
-    const control = await ControlModel.findByPk(1); 
+    // const links = await LinkModel.findByPk(1); 
+    // const control = await ControlModel.findByPk(1); 
+    const links = await LinkModel.findOne({
+        order: [['id', 'ASC']]
+    });
+    const control = await ControlModel.findOne({
+        order: [['id', 'ASC']]
+    });
  
     ResponseData.ok(res, "Game Data", { discord: links?.discord, elite: links?.elite, inforge: links?.inforge, ragezone: links?.ragezone, name: control.name, captcha_key: control.captcha_key }); 
 } 
@@ -668,7 +679,9 @@ const ipnVerify = async (req, res) => {
  
     const body = req.body || {}; 
  
-    const site_data = await ControlModel.findByPk(1); 
+    const site_data = await ControlModel.findOne({
+        order: [['id', 'ASC']]
+    });
  
     // Validate IPN message with PayPal 
     try { 
@@ -865,7 +878,9 @@ const webhook = async (req, res) => {
                 return;
             }
 
-            const site_data = await ControlModel.findByPk(1); 
+            const site_data = await ControlModel.findOne({
+                order: [['id', 'ASC']]
+            });            
 
             const item_number = sessionWithLineItems.metadata.coinId;
 
