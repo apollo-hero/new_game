@@ -15,21 +15,21 @@
                         <div class="px-5 pt-5 text-center">
                             <div class="flex text-center justify-center">
                                 <img
-                                    alt="Noskingdom"
+                                    alt="Zelda"
                                     class="rounded-full"
                                     :src="
-                                        require(`@/assets/images/logo.png`)
-                                    "
+                                        require(`@/assets/images/logo.png`)"
+																																								style="width: 100px; height: 100px;"
                                 />
-                                <div class="text-3xl mt-5">NOSKINGDOM</div>
+                                <div class="text-3xl mt-5">Zelda</div>
                             </div>
-                            <div class="text-gray-600 mt-2">Welcome back to Noskingdom!</div>
+                            <div class="text-gray-600 mt-2">Welcome back to Zelda!</div>
                             <div class="text-gray-600 mt-2">Don't forget to join our <a :href="discord" class="text-theme-1">Discord</a> server to be aware of our latest news, updates and more!</div>
                             <div v-if="login_failed" class="mt-5 text-theme-6">Unknown credentials</div>
                         </div>
                         <div class="px-5 mb-4"> 
                             <label>Email</label> 
-                            <input v-model="email" type="email" class="input w-full border mt-2" placeholder="example" :style="error_email_text ? 'border-color: #e53e3e' : ''"> 
+                            <input v-model="email" type="email" class="input w-full border mt-2" placeholder="Email" :style="error_email_text ? 'border-color: #e53e3e' : ''"> 
                             <small v-if="error_email_text" class="text-theme-6">{{ this.email_error }}</small>
                         </div>
                         <div class="relative px-5 mb-4"> 

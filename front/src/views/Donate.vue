@@ -10,17 +10,6 @@
           <div v-for="coin, index in coins" :key="index" class="col-span-12 sm:col-span-6 xl:col-span-3">
             <div class="report-box zoom-in">
               <div v-if="init.coin_discount == 0" class="box p-5">
-                  <!-- <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-                      <input type="hidden" name="business" v-model="init.site_email">
-                      <input type="hidden" name="cmd" value="_donations">
-                      <input type="hidden" name="no_shipping" value="1">
-                      <input type="hidden" name="shipping_preference" value="NO_SHIPPING">
-                      <input type="hidden" name="item_name" value="Server donation">
-                      <input type="hidden" name="amount" :value="coin.Price * (1-init.site_coin_discount/100)">
-                      <input type="hidden" name="custom" v-model="user.Id">
-                      <input type="hidden" name="currency_code" value="EUR">
-                      <input type="hidden" name="notify_url" value="https://nzennos.com/nosback/public/api/paypal-postback">
-                      <input type="hidden" name="item_number" :value="coin.CoinsId"> -->
                       <button @click="handleDonate(coin.Price * (1 - init.coin_discount/100),coin.CoinId)">
                       <div class="flex">
                         <div class="text-3xl font-bold leading-8">{{ coin.Price }}€</div>
@@ -41,17 +30,6 @@
               </div>
 
               <div v-if="init.site_coin_discount > 0" class="box p-5">
-                <!-- <form action="https://www.paypal.com/cgi-bin/webscr" method="post"> -->
-                      <!-- <input type="hidden" name="business" v-model="init.site_email">
-                      <input type="hidden" name="cmd" value="_donations">
-                      <input type="hidden" name="no_shipping" value="1">
-                      <input type="hidden" name="shipping_preference" value="NO_SHIPPING">
-                      <input type="hidden" name="item_name" value="Server donation">
-                      <input type="hidden" name="amount" :value="coin.Price * (1-init.site_coin_discount/100)">
-                      <input type="hidden" name="custom" v-model="user.Id">
-                      <input type="hidden" name="currency_code" value="EUR">
-                      <input type="hidden" name="notify_url" value="https://nzennos.com/nosback/public/api/paypal-postback">
-                      <input type="hidden" name="item_number" :value="coin.CoinsId"> -->
                       <button @click="handleDonate(coin.Price * (1 - init.coin_discount/100),coin.CoinId)">
                         <div class="flex">
                           <div class="text-3xl font-bold leading-8 line-through">{{ coin.Price }}€</div>

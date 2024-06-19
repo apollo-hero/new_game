@@ -8,7 +8,7 @@
             alt=""
             class="rounded-full"
             :src="require(`@/assets/images/logo.png`)"
-            style="width: 250px; height: 100px;"
+            style="width: 100px; height: 100px;"
           />
           <a href="javascript:;" class="text-lg font-medium ml-auto flex items-center px-5" @click="goto()" style="color: #3f51b5;">
             <img
@@ -25,7 +25,7 @@
           <h2 class="page-title">Terms of Service</h2>
           <div class="intro-text">
             <p>
-              Welcome to Zennos. Please read these terms and conditions carefully before using our services.
+              Welcome to Zelda. Please read these terms and conditions carefully before using our services.
             </p>
           </div>
 
@@ -39,7 +39,7 @@
           <div class="terms-section">
             <h3 class="section-title">Donations</h3>
             <p>
-              If you choose to donate to the server, please note that the Zennos Points will be credited to your account and are non-refundable. We reserve the right to modify the values and prices of Zennos Points without prior notice.
+              If you choose to donate to the server, please note that the Zelda Points will be credited to your account and are non-refundable. We reserve the right to modify the values and prices of Zelda Points without prior notice.
             </p>
           </div>
 

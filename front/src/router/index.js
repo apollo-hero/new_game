@@ -33,67 +33,67 @@ const routes = [
         path: "dashboard",
         name: "Dashboard",
         component: Dashboard,
-        meta: {title: 'zennos - dashboard'}
+        meta: {title: 'Zelda - dashboard'}
       },
       {
         path: "download_launcher",
         name: "Download-Launcher",
         component: Download_luncher,
-        meta: {title: 'zennos - download'}
+        meta: {title: 'Zelda - download'}
       },
       {
         path: "leaderboards",
         name: "Rankings",
         component: Tabulator,
-        meta: {title: 'zennos - leaderboards'}
+        meta: {title: 'Zelda - leaderboards'}
       },
       {
         path: "support",
         name: "Support",
         component: Support,
-        meta: {title: 'zennos - support'}
+        meta: {title: 'Zelda - support'}
       },
       {
         path: "profile",
         name: "Profile",
         component: Dashboard,
-        meta: {title: 'zennos - profile'}
+        meta: {title: 'Zelda - profile'}
       },
       {
         path: "shop",
         name: "Shop",
         component: Shop,
-        meta: {title: 'zennos - shop'}
+        meta: {title: 'Zelda - shop'}
       },
       {
         path: "donate",
         name: "Donate",
         component: Donate,
-        meta: {title: 'zennos - donate'}
+        meta: {title: 'Zelda - donate'}
       },
       {
         path: "settings",
         name: "Settings",
         component: Settings,
-        meta: {title: 'zennos - settings'}
+        meta: {title: 'Zelda - settings'}
       },
       {
         path: "server-settings",
         name: "Sever-Settings",
         component: ServerSetting,
-        meta: {title: 'zennos - server-settings'}
+        meta: {title: 'Zelda - server-settings'}
       },
       {
         path: "wheel",
         name: "Roulette",
         component: Roulette,
-        meta: {title: 'zennos - Roulette'}
+        meta: {title: 'Zelda - Roulette'}
       },
       {
         path: "log",
         name: "Logs",
         component: Log,
-        meta: {title: 'zennos - logs'}
+        meta: {title: 'Zelda - logs'}
       },
     ]
   },
@@ -101,31 +101,31 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
-    meta: {title: 'zennos - login'}
+    meta: {title: 'Zelda - login'}
   },
   {
     path: "/register",
     name: "register",
     component: Register,
-    meta: {title: 'zennos - register'}
+    meta: {title: 'Zelda - register'}
   },
   {
     path: "/terms_service",
     name: "terms",
     component: Terms,
-    meta: {title: 'zennos - terms'}
+    meta: {title: 'Zelda - terms'}
   },
   {
     path: "/maintanence",
     name: "maintanence",
     component: Maintanence,
-    meta: {title: 'zennos - maintanence'}
+    meta: {title: 'Zelda - maintanence'}
   },
   {
     path: "/privacy_policy",
     name: "privacy",
     component: Privacy,
-    meta: {title: 'zennos - privacy'}
+    meta: {title: 'Zelda - privacy'}
   },
   {
     path: "/error-page",
@@ -152,7 +152,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || 'zennos';
+  document.title = to.meta.title || 'Zelda';
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (store.state.main.authToken == null) {
       next({

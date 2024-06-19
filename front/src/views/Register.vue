@@ -12,17 +12,17 @@
                         style="background-color: #12171d;"
                     >
                         <div class="p-5 text-center">
-                            <div class="flex text-center justify-center">
+																									<div class="flex text-center justify-center">
                                 <img
-                                    alt="Noskingdom"
+                                    alt="Zelda"
                                     class="rounded-full"
                                     :src="
-                                        require(`@/assets/images/logo.png`)
-                                    "
+                                        require(`@/assets/images/logo.png`)"
+																																								style="width: 100px; height: 100px;"
                                 />
-                                <div class="text-3xl mt-5">NOSKINGDOM</div>
+                                <div class="text-3xl mt-5">Zelda</div>
                             </div>
-                            <div class="text-gray-600 mt-2">Welcome back to Noskingdom!</div>
+                            <div class="text-gray-600 mt-2">Welcome back to Zelda!</div>
                         </div>
                         <div class="px-5 mb-4"> 
                             <label>Username</label> 
@@ -31,7 +31,7 @@
                         </div>
                         <div class="px-5 mb-4"> 
                             <label>Email</label> 
-                            <input v-model="register_email" type="email" class="input w-full border mt-2" placeholder="example@gmail.com"
+                            <input v-model="register_email" type="email" class="input w-full border mt-2" placeholder="Email"
                             :style="error_register_email_text ? 'border-color: #e53e3e' : ''"> 
                             <small v-if="error_register_email_text" class="text-theme-6">{{ this.register_email_error }}</small>
                         </div>

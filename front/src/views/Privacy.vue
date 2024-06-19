@@ -8,7 +8,7 @@
             alt=""
             class="rounded-full"
             :src="require(`@/assets/images/logo.png`)"
-            style="width: 250px; height: 100px;"
+            style="width: 100px; height: 100px;"
           />
           <a href="javascript:;" class="text-lg font-medium ml-auto flex items-center px-5" @click="goto()" style="color: #3f51b5;">
             <img
@@ -26,7 +26,7 @@
           <h2 class="page-title">Privacy Policy</h2>
           <div class="intro-text">
             <p>
-              At Zennos, we prioritize the privacy and security of our users. Our dedicated and experienced team is committed to providing a secure and reliable Nostale private server that continually improves.
+              At Zelda, we prioritize the privacy and security of our users. Our dedicated and experienced team is committed to providing a secure and reliable Nostale private server that continually improves.
             </p>
           </div>
 
