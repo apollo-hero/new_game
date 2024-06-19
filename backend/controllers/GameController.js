@@ -594,8 +594,14 @@ const convertDate = async ( data ) => {
 } 
  
 const getData = async (req, res) => { 
-    const links = await LinkModel.findByPk(1); 
-    const control = await ControlModel.findByPk(1); 
+    // const links = await LinkModel.findByPk(1); 
+    // const control = await ControlModel.findByPk(1); 
+    const links = await LinkModel.findOne({
+        order: [['id', 'ASC']]
+    });
+    const control = await ControlModel.findOne({
+        order: [['id', 'ASC']]
+    });
  
     ResponseData.ok(res, "Game Data", { discord: links?.discord, elite: links?.elite, inforge: links?.inforge, ragezone: links?.ragezone, name: control.name, captcha_key: control.captcha_key }); 
 } 
