@@ -58,7 +58,9 @@ const updateSetting = async (req, res) => {
             return ResponseData.error(res, 'Not registered token & user',); 
         } 
  
-        const control = await ControlModel.findByPk(1); 
+        const control = await ControlModel.findOne({
+            order: [['id', 'ASC']]
+        });
         if( !control ) { 
             const control = new ControlModel(); 
             control.name = req.body.site_name; 
@@ -100,7 +102,10 @@ const updateSetting = async (req, res) => {
             await control.save(); 
         } 
  
-        const link = await LinkModel.findByPk(1); 
+        const link = await LinkModel.findOne({
+            order: [['id', 'ASC']]
+        });
+        
         if(!link){ 
             const link = new LinkModel(); 
             link.x64_download = req.body.x64_download_link; 
@@ -674,7 +679,9 @@ const ipnVerify = async (req, res) => {
  
     const body = req.body || {}; 
  
-    const site_data = await ControlModel.findByPk(1); 
+    const site_data = await ControlModel.findOne({
+        order: [['id', 'ASC']]
+    });
  
     // Validate IPN message with PayPal 
     try { 
@@ -871,7 +878,9 @@ const webhook = async (req, res) => {
                 return;
             }
 
-            const site_data = await ControlModel.findByPk(1); 
+            const site_data = await ControlModel.findOne({
+                order: [['id', 'ASC']]
+            });            
 
             const item_number = sessionWithLineItems.metadata.coinId;
 
