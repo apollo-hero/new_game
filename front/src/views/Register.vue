@@ -12,33 +12,33 @@
                         style="background-color: #12171d;"
                     >
                         <div class="p-5 text-center">
-                            <div class="flex text-center justify-center">
+																									<div class="flex text-center justify-center">
                                 <img
-                                    alt="Noskingdom"
+                                    alt="Zelda"
                                     class="rounded-full"
                                     :src="
-                                        require(`@/assets/images/logo.png`)
-                                    "
+                                        require(`@/assets/images/logo.png`)"
+																																								style="width: 100px; height: 100px;"
                                 />
-                                <div class="text-3xl mt-5">NOSKINGDOM</div>
+                                <div class="text-3xl mt-5">Zelda</div>
                             </div>
-                            <div class="text-gray-600 mt-2">Welcome back to Noskingdom!</div>
+                            <div class="text-gray-600 mt-2">Welcome back to Zelda!</div>
                         </div>
                         <div class="px-5 mb-4"> 
                             <label>Username</label> 
-                            <input v-model="username" type="text" class="input w-full border mt-2" placeholder="username" :style="error_username_text ? 'border-color: #e53e3e' : ''"> 
+                            <input v-model="username" type="text" class="input w-full border mt-2" placeholder="Username" :style="error_username_text ? 'border-color: #e53e3e' : ''"> 
                             <small v-if="error_username_text" class="text-theme-6">{{ this.username_error }}</small>
                         </div>
                         <div class="px-5 mb-4"> 
                             <label>Email</label> 
-                            <input v-model="register_email" type="email" class="input w-full border mt-2" placeholder="example@gmail.com"
+                            <input v-model="register_email" type="email" class="input w-full border mt-2" placeholder="Email"
                             :style="error_register_email_text ? 'border-color: #e53e3e' : ''"> 
                             <small v-if="error_register_email_text" class="text-theme-6">{{ this.register_email_error }}</small>
                         </div>
                         <div class="relative px-5 mb-4"> 
                             <label>Password</label> 
                             <div class="relative mt-2"> 
-                                <input v-model="register_password" placeholder="***" :type="show_register_password_input ? 'text' : 'password'" class="input w-full border" :style="error_register_password_text ? 'border-color: #e53e3e' : ''"> 
+                                <input v-model="register_password" placeholder="Password" :type="show_register_password_input ? 'text' : 'password'" class="input w-full border" :style="error_register_password_text ? 'border-color: #e53e3e' : ''"> 
                                 <div class="absolute top-0 right-0 rounded-r w-10 h-full flex items-center justify-center bg-gray-100 dark:bg-dark-1 dark:border-dark-4 border text-gray-600" :style="error_register_password_text ? 'border-top-color: #e53e3e;border-bottom-color: #e53e3e;border-right-color: #e53e3e;' : ''">
                                     <EyeIcon v-if="!show_register_password_input" @click="show_register_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_register_password_text ? 'color: #e53e3e;' : ''" />
                                     <EyeOffIcon v-if="show_register_password_input" @click="show_register_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_register_password_text ? 'color: #e53e3e;' : ''" />

@@ -5,13 +5,6 @@
       <div
         class="error-page flex flex-col lg:flex-row items-center justify-center h-screen text-center lg:text-left"
       >
-        <div class="-intro-x lg:mr-20">
-          <img
-            alt=""
-            class="h-48 lg:h-auto"
-            :src="require(`@/assets/images/Register.png`)"
-          />
-        </div>
         <div class="text-white mt-10 lg:mt-0">
           <div class="intro-x text-6xl font-medium">Sorry</div>
           <div class="intro-x text-xl lg:text-3xl font-medium">

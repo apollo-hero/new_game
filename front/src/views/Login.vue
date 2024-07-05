@@ -15,27 +15,27 @@
                         <div class="px-5 pt-5 text-center">
                             <div class="flex text-center justify-center">
                                 <img
-                                    alt="Noskingdom"
+                                    alt="Zelda"
                                     class="rounded-full"
                                     :src="
-                                        require(`@/assets/images/logo.png`)
-                                    "
+                                        require(`@/assets/images/logo.png`)"
+																																								style="width: 100px; height: 100px;"
                                 />
-                                <div class="text-3xl mt-5">NOSKINGDOM</div>
+                                <div class="text-3xl mt-5">Zelda</div>
                             </div>
-                            <div class="text-gray-600 mt-2">Welcome back to Noskingdom!</div>
+                            <div class="text-gray-600 mt-2">Welcome back to Zelda!</div>
                             <div class="text-gray-600 mt-2">Don't forget to join our <a :href="discord" class="text-theme-1">Discord</a> server to be aware of our latest news, updates and more!</div>
                             <div v-if="login_failed" class="mt-5 text-theme-6">Unknown credentials</div>
                         </div>
                         <div class="px-5 mb-4"> 
                             <label>Email</label> 
-                            <input v-model="email" type="email" class="input w-full border mt-2" placeholder="example@gmail.com" :style="error_email_text ? 'border-color: #e53e3e' : ''"> 
+                            <input v-model="email" type="email" class="input w-full border mt-2" placeholder="Email" :style="error_email_text ? 'border-color: #e53e3e' : ''"> 
                             <small v-if="error_email_text" class="text-theme-6">{{ this.email_error }}</small>
                         </div>
                         <div class="relative px-5 mb-4"> 
                             <label>Password</label> 
                             <div class="relative mt-2"> 
-                                <input v-on:keyup="enterpress" v-model="password" placeholder="***" :type="show_password_input ? 'text' : 'password'" class="input w-full border" :style="error_password_text ? 'border-color: #e53e3e' : ''"> 
+                                <input v-on:keyup="enterpress" v-model="password" placeholder="Password" :type="show_password_input ? 'text' : 'password'" class="input w-full border" :style="error_password_text ? 'border-color: #e53e3e' : ''"> 
                                 <div class="absolute top-0 right-0 rounded-r w-10 h-full flex items-center justify-center bg-gray-100 dark:bg-dark-1 dark:border-dark-4 border text-gray-600" :style="error_password_text ? 'border-top-color: #e53e3e;border-bottom-color: #e53e3e;border-right-color: #e53e3e;' : ''">
                                     <EyeIcon v-if="!show_password_input" @click="show_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_password_text ? 'color: #e53e3e;' : ''" />
                                     <EyeOffIcon v-if="show_password_input" @click="show_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_password_text ? 'color: #e53e3e;' : ''" />
