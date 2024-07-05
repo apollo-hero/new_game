@@ -288,6 +288,9 @@ export default {
           } else {
             self.handleError(res);
           }
+        })
+        .catch(function(error) {
+           self.handleError(error);
         });
     },
 
@@ -308,6 +311,9 @@ export default {
           } else {
             self.handleError(res);
           }
+        })
+        .catch(function(error) {
+           self.handleError(error);
         });
     },
 
@@ -417,7 +423,7 @@ export default {
         }
       })
       .catch(function(error) {
-        console.log(error);          
+          self.handleError(error);
       });
     },
 
@@ -453,7 +459,7 @@ export default {
       this.category = id;
     },
     handleError(res){
-      if(res.data.status == 'error' && res.data.message == 'Token expired'){
+      if((res.data?.status == 'error' && res.data?.message == 'Token expired') || res.response?.status == 401){
           this.$store.dispatch('main/logout').then((res)=>{
               this.$router.push({ path: "/" });
           })

@@ -187,6 +187,9 @@ export default {
                     self.handleError(res);
                 }
             })
+            .catch(function(error) {
+                self.handleError(error);
+            });
         },
         getCharacters(){
             let self = this;
@@ -196,9 +199,12 @@ export default {
                     token: localStorage.getItem('token'),
                 }
             })
-                .then((res)=>{
-                    self.characters = res.data.characters;
-                })
+            .then((res)=>{
+                self.characters = res.data.characters;
+            })
+            .catch(function(error) {
+                self.handleError(error);
+            });
         },
 
         getCharacterImage(t){
@@ -214,7 +220,7 @@ export default {
         },
 
         handleError(res){
-            if(res.data.status == 'error' && res.data.message == 'Token expired'){
+            if((res.data?.status == 'error' && res.data?.message == 'Token expired') || res.response?.status == 401){
                 this.$store.dispatch('main/logout').then((res)=>{
                     this.$router.push({ path: "/" });
                 })
@@ -237,6 +243,9 @@ export default {
                             self.$store.dispatch("main/setUser", res.data.user);
                         }
                     })
+                    .catch(function(error) {
+                        self.handleError(error);
+                    });
             },15000);  // 5s
         }
     }

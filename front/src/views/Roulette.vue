@@ -223,14 +223,17 @@ export default {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             }
         })
-            .then((res)=>{
-              if(res.data.message == "success"){
-                self.jackpots = res.data.result.jackpots;
-                // self.double_jackpot = res.data.double_jackpot == 1 ? true : false;
-              } else {
+        .then((res)=>{
+          if(res.data.message == "success"){
+            self.jackpots = res.data.result.jackpots;
+            // self.double_jackpot = res.data.double_jackpot == 1 ? true : false;
+          } else {
 
-              }
-            })
+          }
+        })
+        .catch(function(error) {
+            self.handleError(error);
+        });
     },
 
     getItems(){
@@ -249,6 +252,9 @@ export default {
                 self.handleError(res);
             }
             
+            })
+            .catch(function(error) {
+                self.handleError(error);
             });
     },
 
@@ -345,8 +351,10 @@ export default {
             self.status = 0;
             self.double_jackpot = false;
           }
-          
         })
+        .catch(function(error) {
+            self.handleError(error);
+        });
           
       } else if(self.status == 2){
         self.html = "";
@@ -360,7 +368,7 @@ export default {
     },
 
     handleError(res){
-      if(res.data.status == 'error' && res.data.message == 'Token expired'){
+      if((res.data?.status == 'error' && res.data?.message == 'Token expired') || res.response?.status == 401){
           this.$store.dispatch('main/logout').then((res)=>{
               this.$router.push({ path: "/" });
           })

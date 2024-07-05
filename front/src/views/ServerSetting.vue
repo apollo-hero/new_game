@@ -224,8 +224,19 @@
               stopOnFocus: true
             }).showToast();
           }
+        })
+        .catch(function(error) {
+            self.handleError(error);
         });
-      }
+      },
+
+      handleError(res){
+        if((res.data?.status == 'error' && res.data?.message == 'Token expired') || res.response?.status == 401){
+            this.$store.dispatch('main/logout').then((res)=>{
+                this.$router.push({ path: "/" });
+            })
+        }
+      },
     },
     watch:{
       
