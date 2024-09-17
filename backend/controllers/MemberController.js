@@ -2,12 +2,19 @@ const jwt = require("jsonwebtoken");
 const { validationResult } = require('express-validator');
 
 const { Op } = require('sequelize');
+
+const axios = require('axios'); 
+
 const { JWT_SECRET_KEY } = require("../config/server.config");
 
 const Model = require("../models");
 
 const users = Model.user;
 const characters = Model.character;
+
+const CoinModel = Model.coin; 
+
+const PaymentWebModel = Model.payment_web; 
 
 const ResponseData = require("../utils/ResponseData");
 const { jwtsign, checkPassword, encryptPassword, ResponseUserModel } = require("./AuthController");
@@ -184,9 +191,70 @@ const leaderboards = async (req, res) => {
     return ResponseData.ok(res, '', { level_data: level_data, hero_data: hero_data, reput_data: reput_data, act_data:act_data });
 }
 
+const verify = async (req, res) => {
+    const user_data = await users.findOne({
+        where: { token: req.body.token },
+    });
+
+    if(user_data.Email){
+        user_data.VerifyEmail = true;
+        await user_data.save();
+
+        return ResponseData.ok(res, "Email verify successfully.", {});
+    } else {
+        return ResponseData.warning(res, "Email verify failed", {});
+    }
+}
+
+const pay_crypto = async (req, res) => {
+
+    const coinId = req.body.coinId;
+
+    const coins_info = await CoinModel.findOne({ where: { CoinId : coinId}}); 
+
+    var data = JSON.stringify({
+        "price_amount": coins_info.Price,
+        "price_currency": "eur",
+        "order_id": req.user.Id,
+        "order_description": coinId.toString(),
+        "ipn_callback_url": "https://605e-83-234-227-54.ngrok-free.app/game/crypto_ipn",
+        "success_url": "http://localhost:8080/donate",
+        "cancel_url": "https://localhost:8080/donate",
+        "is_fee_paid_by_user": true,
+      });
+      
+    var config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'https://api-sandbox.nowpayments.io/v1/invoice',
+    headers: { 
+        'x-api-key': 'BRAVQ6K-157MAC3-HZNWS0M-P6QGK97', 
+        'Content-Type': 'application/json'
+    },
+    data : data
+    };
+    
+    const link = await axios(config)
+        .then(async function (response) {
+        
+            const link = response.data.invoice_url;
+
+            return link;
+            
+        })
+        .catch(function (error) {
+            console.log(error);
+            return "";
+        });
+    
+    return ResponseData.ok(res, "", {link: link});
+}
+
 module.exports = {
     amount,
     setProfile,
     leaderboards,
-    updatePassword
+    updatePassword,
+    verify,
+    pay_crypto
 }

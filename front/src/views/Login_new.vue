@@ -1,65 +1,36 @@
 <template>
     <!-- <div> -->
         <div class="container sm:px-10">
-            <div class="block xl:grid gap-4">
-
-                <!-- BEGIN: Login Form -->
-                <div
-                    class="m-auto h-full flex py-5 xl:py-0 my-10 xl:my-0 bg-black"
-                    style="min-width: 400px; width: 30%;"
-                >
-                    <div
-                        class="flex-1 box py-16 mb-5 lg:mb-0"
-                        style="background-color: #12171d;"
-                    >
-                        <div class="px-5 pt-5 text-center">
-                            <div class="flex text-center justify-center">
-                                <img
-                                    alt="Zelda"
-                                    class="rounded-full"
-                                    :src="
-                                        require(`@/assets/images/logo.png`)"
-																																								style="width: 100px; height: 100px;"
-                                />
-                                <div class="text-3xl mt-5">Zelda</div>
-                            </div>
-                            <div class="text-gray-600 mt-2">Welcome back to Zelda!</div>
-                            <div class="text-gray-600 mt-2">Don't forget to join our <a :href="discord" class="text-theme-1">Discord</a> server to be aware of our latest news, updates and more!</div>
-                            <div v-if="login_failed" class="mt-5 text-theme-6">Unknown credentials</div>
-                        </div>
-                        <div class="px-5 mb-4"> 
-                            <label>Email</label> 
-                            <input v-model="email" type="email" class="input w-full border mt-2" placeholder="Email" :style="error_email_text ? 'border-color: #e53e3e' : ''"> 
-                            <small v-if="error_email_text" class="text-theme-6">{{ this.email_error }}</small>
-                        </div>
-                        <div class="relative px-5 mb-4"> 
-                            <label>Password</label> 
-                            <div class="relative mt-2"> 
-                                <input v-on:keyup="enterpress" v-model="password" placeholder="Password" :type="show_password_input ? 'text' : 'password'" class="input w-full border" :style="error_password_text ? 'border-color: #e53e3e' : ''"> 
-                                <div class="absolute top-0 right-0 rounded-r w-10 h-full flex items-center justify-center bg-gray-100 dark:bg-dark-1 dark:border-dark-4 border text-gray-600" :style="error_password_text ? 'border-top-color: #e53e3e;border-bottom-color: #e53e3e;border-right-color: #e53e3e;' : ''">
-                                    <EyeIcon v-if="!show_password_input" @click="show_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_password_text ? 'color: #e53e3e;' : ''" />
-                                    <EyeOffIcon v-if="show_password_input" @click="show_password()" class="w-4 h-4 text-white cursor-pointer" :style="error_password_text ? 'color: #e53e3e;' : ''" />
+            <div class="box">
+                <div class="flip-card-inner">
+                    <div class="box-login">
+                        <ul>
+                            <form action="" method="get">
+                                <h1>LOGIN</h1>
+                                <div class="email-login">
+                                    <input v-model="email" class="inpt" type="email" name="email" id="" placeholder="Email " required>
+                                    <i class='fa fa-envelope'></i>
                                 </div>
+
+                                <div class="password-login">
+                                    <input v-on:keyup="enterpress" v-model="password" class="inpt" type="password" name="password" id="password-login"
+                                        placeholder="Password" required>
+                                    <i id="eye-login" class="fa fa-eye-slash"></i>
+                                </div>
+
+                                <div class="forget">
+                                    <input type="checkbox" name="checkbox1" id="checkbox">
+                                    <label for="checkbox">Remember me</label>
+                                    <a href="#">Forget Password?</a>
+                                </div>
+                                <button type="button" @click="login()" class="btn">LOGIN</button>
+                            </form>
+                            <div class="register-link">
+                                <p>Dont have an account? <a href="#" @click="toRegister()">Sign Up</a></p>
                             </div>
-                            <small v-if="error_password_text" class="text-theme-6">The Password field is required</small>
-                        </div>
-                        <!-- <div class="p-5"> 
-                            <label>Password</label> 
-                            <input v-on:keyup="enterpress" v-model="password" type="password" class="input w-full border mt-2" :style="error_password_text ? 'border-color: #e53e3e' : ''"> 
-                            <small v-if="error_password_text" class="text-theme-6">The Password field is required</small>
-                        </div> -->
-                        <div class="flex px-5 mb-4 items-center text-gray-700 dark:text-gray-500"> <input type="checkbox" class="input border mr-2" id="vertical-remember-me"> <label class="cursor-pointer select-none" for="vertical-remember-me">Remember me</label> </div>
-                        <div class="flex mb-4 justify-center"><button @click="login()" type="button" class="button bg-theme-1 text-white w-full mx-5 mt-5">Login</button></div>
-                        <div class="text-center mb-4">
-                            Are you new? <a href="javascript:;" @click="toRegister()" class="text-purple-500">Create an account</a>
-                        </div>
-                        <div class="text-center mb-2">
-                            ● <a :href="elite">Elitepvpers</a> ● <a :href="cheat">Cheat-Gam3</a> ● <a :href="inforge">Inforge</a> ●
-                        </div>
-                        <div class="flex mb-4 justify-center"><a @click="toWiki()" class="button bg-theme-1 text-white w-[50%] mx-5 mt-5">WIKI</a></div>
+                        </ul>
                     </div>
                 </div>
-                <!-- END: Login Form -->
             </div>
         </div>
     <!-- </div> -->
@@ -121,18 +92,18 @@ export default {
         }
     },
     mounted() {
-        cash("body")
-            .removeClass("app")
-            .addClass("login");
-        this.setDarkModeClass();
+        // cash("body")
+        //     .removeClass("app")
+        //     .addClass("login");
+        // this.setDarkModeClass();
         this.getLinks();
     },
     methods: {
-        setDarkModeClass() {
-        this.darkMode
-            ? cash("html").addClass("dark")
-            : cash("html").removeClass("dark");
-        },
+        // setDarkModeClass() {
+        // this.darkMode
+        //     ? cash("html").addClass("dark")
+        //     : cash("html").removeClass("dark");
+        // },
         toRegister(){
             this.$router.push({
             name: 'register'
@@ -146,11 +117,6 @@ export default {
         },
         toInforge() {
             document.location.href = this.inforge;
-        },
-        toWiki() {
-            this.$router.push({
-                name: 'wiki'
-            });
         },
         login() {
             let self = this;
@@ -359,13 +325,275 @@ export default {
 };
 </script>
 <style scoped>
-.login {
-    background: url("/login.jpg") !important;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-repeat: no-repeat;
-    background-size: cover !important;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-image: url("/bg.png") !important;
+  background-repeat: no-repeat;
+  color: white;
+  background-size: fixed;
 }
+
+.box {
+  background-color: transparent !important;
+  width: 530px;
+  height: 500px;
+  perspective: 1000px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* .box:hover .flip-card-inner {
+            transform: rotateY(-180deg);
+        } */
+
+.box-login,
+.box-signup {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.box-login {
+  width: 100%;
+  height: 100%;
+  font-size: 1.5rem;
+    background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+  box-sizing: border-box;
+  backdrop-filter: blur(10px);
+  /* border: 1px solid white; */
+  position: absolute;
+}
+
+.box-login h1 {
+  letter-spacing: 2px;
+}
+
+.box-signup h1 {
+  padding-top: 5px;
+  letter-spacing: 2px;
+}
+
+.box-login ul {
+  padding: 26px;
+}
+
+.box-signup ul {
+  padding: 10px;
+}
+
+.box-login .inpt {
+  width: 27rem;
+  padding: 15px 10px;
+  font-size: 1.4rem;
+  border-radius: 15px;
+  margin: 15px;
+  background: transparent;
+  outline: none;
+}
+
+input::placeholder {
+  color: white;
+  font-size: 1.2rem;
+}
+
+.btn {
+  height: 3.2rem;
+  width: 27rem;
+  margin: 15px 15px 0 15px;
+  padding: 10px;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+  border-radius: 50px;
+  background: white;
+  color: black;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-0.4rem);
+}
+
+.box-login form a {
+  text-decoration: none;
+  color: white;
+  padding-left: 150px;
+  font-size: 1rem;
+}
+
+label {
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.box-signup {
+  color: white;
+  transform: rotateY(180deg);
+  width: 100%;
+  height: 100%;
+  font-size: 1.5rem;
+  text-align: center;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  position: absolute;
+}
+
+.box input {
+  color: white;
+  border-radius: 0px;
+  border: 1px solid white;
+  /* border-bottom-color:white ; */
+  /* padding: 20px 10px; */
+  /* transition: 0.3s ease; */
+}
+
+.box input:focus{
+    border: 2px solid cyan;
+}
+
+.box-signup .inpt {
+  width: 27rem;
+  padding: 15px;
+  font-size: 1.2rem;
+  border-radius: 15px;
+  margin: 10px;
+  background: transparent;
+  transition: 0.5s ease;
+  outline: none;
+}
+
+.box-signup form a {
+  /* display: flex; */
+  text-align: right;
+  text-decoration: none;
+  color: white;
+  padding-left: 155px;
+  font-size: 1rem;
+  /* transition: 0.5s ease; */
+}
+
+form a:active {
+  color: blueviolet;
+}
+
+.box-login .register-link {
+  font-size: 1rem;
+  /* margin-bottom: rem; */
+  padding-bottom: 15px;
+  font-style: italic;
+}
+
+.box-signup .register-link {
+  font-size: 1rem;
+  /* margin-bottom: 3rem; */
+  padding-bottom: 30px;
+  font-style: italic;
+}
+
+.register-link a {
+  color: blueviolet;
+  transition: 0.5s ease;
+}
+
+.register-link a:active {
+  color: blue;
+}
+
+.register-link a:hover {
+  color: red;
+  transform: scale(1.5);
+}
+
+.email-login i {
+  /* content: "\eee1"; */
+  position: absolute;
+  top: 11rem;
+  right: 3.5rem;
+  cursor: pointer;
+}
+
+.password-login i {
+  position: absolute;
+  right: 3.5rem;
+  top: 16.4rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.user-signup i {
+  position: absolute;
+  right: 3.8rem;
+  top: 8.7rem;
+  cursor: pointer;
+}
+
+.email-signup i {
+  top: 13.3rem;
+  position: absolute;
+  right: 3.6rem;
+  cursor: pointer;
+}
+
+.password-signup i {
+  top: 17.9rem;
+  position: absolute;
+  right: 3.7rem;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+@media (max-width: 480px) {
+  .box {
+    width: 90%;
+  }
+
+  .box .inpt {
+    width: 85%;
+    font-size: 90%;
+  }
+
+  .box form a {
+    padding-left: 1rem;
+    font-size: 0.9rem;
+  }
+
+  .box-login ul {
+    padding: 5px;
+  }
+
+  .btn {
+    width: 80%;
+  }
+}
+
+
+
 </style>

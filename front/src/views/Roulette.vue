@@ -14,7 +14,7 @@
             style="background-color: #232a3b"
           >
             <div class="text-gray-500 mt-1 font-medium">
-              To spin the wheel, you need 200 Coins.
+              To spin the wheel, you need 201 Coins.
             </div>
             <div class="text-gray-500 mt-1 font-medium">
               Select on which character you want to receive your reward.
@@ -127,7 +127,7 @@
                     
 
                 <div class="wheel-button-play" data-status="0" @click="playWheel()">
-                    <p v-if="status == 0" class="w-full spin">Spin <br>200 Coins</p>
+                    <p v-if="status == 0" class="w-full spin">Spin <br>350 Coins</p>
                     <p v-else-if="status == 1" class="w-full spin">Wait ...</p>
                     <p v-else class="w-full spin">Clear</p>
                 </div>
@@ -209,7 +209,7 @@ export default {
   methods: {
     getImageSrc(iconId) {
       try {
-        return require(`@/assets/items/${iconId}.png`);
+        return `/items/${iconId}.png`;
       } catch (e) {
         console.error(`Image not found for iconId: ${iconId}`);
         return ''; // Return a placeholder or empty string if image not found
@@ -502,7 +502,7 @@ export default {
                     character.Class == 2 && character.Gender == 1 ? '32100' :
                     character.Class == 3 && character.Gender == 0 ? '32120' : '32140';
 
-        return require(`@/assets/items/${image}.png`);
+        return `/items/${image}.png`;
     }
   }
 };

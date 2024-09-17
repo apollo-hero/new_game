@@ -13,8 +13,6 @@ const stripe = require('stripe')('sk_test_51P1NhQP8bC8pI0cCopNmUPCGVEkEIjPY5JZj5
 const pool = require('./config/db.config'); 
 
 const GameController = require('./controllers/GameController');
-
-const ErrorMiddleware = require('./middleware/ErrorMiddleware');
  
 require('dotenv').config(); 
  
@@ -26,7 +24,7 @@ app.post('/game/webhook', bodyParser.raw({type: 'application/json'}), async (req
   GameController.webhook(request, response);
 });
 
-app.use(bodyParser.urlencoded({extended:false})) 
+app.use(bodyParser.urlencoded({extended:true})) 
 app.use(bodyParser.json()); 
 app.use(bodyParser.raw()); 
  

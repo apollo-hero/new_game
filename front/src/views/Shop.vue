@@ -3,9 +3,7 @@
     <div v-if="shop_status" class="col-span-12 lg:col-span-3 xxl:col-span-2">
       <!-- BEGIN: File Manager Menu -->
       <div class="box p-5 mt-6">
-        <div class="mt-1" ref="special">
-          Search
-        </div>
+        <div class="mt-1" ref="special">Search</div>
         <div class="border-t border-gray-200 dark:border-dark-5 mt-5 pt-5">
           <input
             v-model="search_text"
@@ -18,7 +16,7 @@
           Categories
         </div>
         <div class="border-t border-gray-200 dark:border-dark-5 mt-5 pt-5">
-          <div v-for="(c) in categories" v-bind:key="c.id">
+          <div v-for="c in categories" v-bind:key="c.id">
             <input
               v-model="category"
               :id="c.id"
@@ -26,11 +24,9 @@
               class="input border mr-2"
               :value="c.id"
             />
-            <label
-              class="cursor-pointer select-none"
-              for="vertical-remember-me"
-              >{{ c.name }}</label
-            >
+            <label class="cursor-pointer select-none" for="vertical-remember-me">{{
+              c.name
+            }}</label>
           </div>
         </div>
       </div>
@@ -44,46 +40,45 @@
           :key="`item-${index}`"
           class="col-span-6 sm:col-span-4 md:col-span-3 xxl:col-span-2"
         >
-          <div
-            class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in"
+          <a
+            href="javascript:;"
+            class="w-3/5 file__icon--image mx-auto"
+            data-toggle="modal"
+            data-target="#buy_modal"
+            @click="handleItem(item)"
           >
-            <a
-              href="javascript:;"
-              class="w-3/5 file__icon--image mx-auto"
-              data-toggle="modal"
-              data-target="#buy_modal"
-              @click="handleItem(item)"
-            >
+            <div class="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
               <div class="">
                 <img
                   alt="Midone Tailwind HTML Admin Template"
-                  :src="require(`@/assets/items/${item.iconId}.png`)"
-                  style="width:36px; height:36px; margin:auto;"
+                  :src="`/items/${item.iconId}.png`"
+                  style="width: 36px; height: 36px; margin: auto"
                 />
               </div>
-            </a>
-            
-            <div class="text-gray-600 text-xs text-center justify-center mt-5 flex">
-              {{ item.price }}
-              <img
+
+              <div class="text-gray-600 text-xs text-center justify-center mt-5 flex">
+                {{ item.price }}
+                <img
                   alt="coin"
                   :src="require(`@/assets/images/coin.png`)"
                   class="ml-2"
-                  style="width:20px;"
+                  style="width: 20px"
                 />
+              </div>
+              <a
+                href="javascript:;"
+                class="block font-medium mt-4 text-center truncate border-t border-gray-200 dark:border-dark-5 pt-3"
+                >{{ item.name }}</a
+              >
             </div>
-            <a
-              href="javascript:;"
-              class="block font-medium mt-4 text-center truncate border-t border-gray-200 dark:border-dark-5 pt-3"
-              >{{ item.name }}</a
-            >
-          </div>
+          </a>
         </div>
       </div>
       <!-- END: Directory & Files -->
       <!-- BEGIN: Pagination -->
       <div
-        class="flex flex-wrap sm:flex-row sm:flex-no-wrap items-center mt-6 justify-between absolute" style="bottom: 50px; width: 80%"
+        class="flex flex-wrap sm:flex-row sm:flex-no-wrap items-center mt-6 justify-between absolute"
+        style="bottom: 50px; width: 80%"
       >
         <div class="shop-footer w-full flex justify-between">
           <div class="">
@@ -96,30 +91,25 @@
             of {{ filteredData.length }} items
           </div>
           <nav aria-label="Page navigation">
-          <ul class="pagination">
-            <li class="page-item" :class="{ disabled: currentPage <= 1 }">
-              <a class="pagination__link" href="#" @click.prevent="prevPage"
-                >Previous</a
-              >
-            </li>
-            <li class="page-item" v-for="page in pages" :key="page">
-              <a
-                class="pagination__link"
-                :class="{ 'pagination__link--active': currentPage === page }"
-                href="#"
-                @click.prevent="setPage(page)"
-                >{{ page }}</a
-              >
-            </li>
-            <li
-              class="page-item"
-              :class="{ disabled: currentPage >= totalPages }"
-            >
-              <a class="pagination__link" href="#" @click.prevent="nextPage"
-                >Next</a
-              >
-            </li>
-          </ul>
+            <ul class="pagination">
+              <li class="page-item" :class="{ disabled: currentPage <= 1 }">
+                <a class="pagination__link" href="#" @click.prevent="prevPage"
+                  >Previous</a
+                >
+              </li>
+              <li class="page-item" v-for="page in pages" :key="page">
+                <a
+                  class="pagination__link"
+                  :class="{ 'pagination__link--active': currentPage === page }"
+                  href="#"
+                  @click.prevent="setPage(page)"
+                  >{{ page }}</a
+                >
+              </li>
+              <li class="page-item" :class="{ disabled: currentPage >= totalPages }">
+                <a class="pagination__link" href="#" @click.prevent="nextPage">Next</a>
+              </li>
+            </ul>
           </nav>
         </div>
         <!-- <select class="w-20 input box mt-3 sm:mt-0">
@@ -131,7 +121,9 @@
       </div>
       <!-- END: Pagination -->
     </div>
-    <div v-else class="col-span-12 lg:col-span-9 xxl:col-span-10 mt-10">The shop is currently in maintenance mode.</div>
+    <div v-else class="col-span-12 lg:col-span-9 xxl:col-span-10 mt-10">
+      The shop is currently in maintenance mode.
+    </div>
 
     <!-- Buy Modal -->
     <div class="modal" id="buy_modal">
@@ -147,8 +139,8 @@
           <div class="flex col-span-12 items-center">
             <img
               v-if="item.name"
-              :src="require(`@/assets/items/${item.iconId}.png`)"
-              style="width:36px; height:36px;"
+              :src="`/items/${item.iconId}.png`"
+              style="width: 36px; height: 36px"
               class="flex items-center left"
             />
             <div class="items-center ml-3 mt-5">
@@ -160,7 +152,7 @@
                   alt="coin"
                   :src="require(`@/assets/images/coin.png`)"
                   class="ml-2"
-                  style="width:20px;"
+                  style="width: 20px"
                 />
               </div>
             </div>
@@ -172,12 +164,9 @@
           <div class="col-span-12 sm:col-span-6">
             <select v-model="character" class="input w-full border mt-2 flex-1">
               <option>select character</option>
-              <option
-                v-for="(t, index) in characters"
-                :key="index"
-                :value="t.Id"
-                >{{ t.Name }}</option
-              >
+              <option v-for="(t, index) in characters" :key="index" :value="t.Id">
+                {{ t.Name }}
+              </option>
             </select>
           </div>
           <div class="col-span-12 sm:col-span-3">
@@ -235,25 +224,22 @@ export default {
       perPage: 24,
       totalPages: 0,
       pages: [],
-      shop_status: true
+      shop_status: true,
     };
   },
   computed: {
     filteredData() {
       if (this.search_text && this.category.length == 0) {
         return this.data.filter(
-          (item) =>
-            item.name.toLowerCase().indexOf(this.search_text.toLowerCase()) !==
-            -1
+          (item) => item.name.toLowerCase().indexOf(this.search_text.toLowerCase()) !== -1
         );
       } else if (!this.search_text && this.category.length > 0) {
         return this.data.filter((item) => this.category.includes(item.categoryId));
       } else if (this.search_text && this.category) {
         return this.data.filter(
           (item) =>
-          this.category.includes(item.categoryId) &&
-            item.name.toLowerCase().indexOf(this.search_text.toLowerCase()) !==
-              -1
+            this.category.includes(item.categoryId) &&
+            item.name.toLowerCase().indexOf(this.search_text.toLowerCase()) !== -1
         );
       } else {
         return this.data;
@@ -279,18 +265,18 @@ export default {
         .get("/game/getCategories", {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         })
         .then((res) => {
-          if(res.data.message == "success"){
+          if (res.data.message == "success") {
             self.categories = res.data.result.categories;
           } else {
             self.handleError(res);
           }
         })
-        .catch(function(error) {
-           self.handleError(error);
+        .catch(function (error) {
+          self.handleError(error);
         });
     },
 
@@ -300,11 +286,11 @@ export default {
         .get("/game/getShopItems", {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         })
         .then((res) => {
-          if(res.data.message == "success"){
+          if (res.data.message == "success") {
             self.data = res.data.result.shop_items;
             self.totalPages = Math.ceil(this.filteredData.length / this.perPage);
             self.generatePages();
@@ -312,8 +298,8 @@ export default {
             self.handleError(res);
           }
         })
-        .catch(function(error) {
-           self.handleError(error);
+        .catch(function (error) {
+          self.handleError(error);
         });
     },
 
@@ -325,7 +311,9 @@ export default {
 
     getCharacters() {
       let self = this;
-      self.characters = self.$store.state.main.user.characters.filter(t=>!t.DeletedAt);
+      self.characters = self.$store.state.main.user.characters.filter(
+        (t) => !t.DeletedAt
+      );
     },
 
     buy() {
@@ -374,57 +362,57 @@ export default {
 
       self.loading = true;
 
-      axios.post("/game/buyItem", {
-        orderData: [
+      axios
+        .post(
+          "/game/buyItem",
           {
-            "itemId": self.item.vnum,
-            "quantity": self.quantity,
-            "character": self.character,
-          }
-        ],
-        totalPrice: self.item.price * self.quantity,
-      },
-      {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            orderData: [
+              {
+                itemId: self.item.vnum,
+                quantity: self.quantity,
+                character: self.character,
+              },
+            ],
+            totalPrice: self.item.price * self.quantity,
           },
-        }
-      
-      )
-      .then((res)=>{
-        self.loading = false;
-        if(res?.data && res?.data?.message ==='success'){
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        )
+        .then((res) => {
+          self.loading = false;
+          if (res?.data && res?.data?.message === "success") {
+            Toastify({
+              text: res.data.response,
+              duration: 3000,
+              newWindow: true,
+              close: false,
+              gravity: "bottom",
+              position: "center",
+              backgroundColor: "#2af109",
+              stopOnFocus: true,
+            }).showToast();
 
-          Toastify({
-            text: res.data.response,
-            duration: 3000,
-            newWindow: true,
-            close: false,
-            gravity: "bottom",
-            position: "center",
-            backgroundColor: "#2af109",
-            stopOnFocus: true
-          }).showToast();
-
-          this.$store.dispatch('main/getAccount')
-        }
-        else{
-          Toastify({
-            text: res.data.response,
-            duration: 3000,
-            newWindow: true,
-            close: false,
-            gravity: "bottom",
-            position: "center",
-            backgroundColor: "#e80404",
-            stopOnFocus: true
-          }).showToast();
-        }
-      })
-      .catch(function(error) {
+            this.$store.dispatch("main/getAccount");
+          } else {
+            Toastify({
+              text: res.data.response,
+              duration: 3000,
+              newWindow: true,
+              close: false,
+              gravity: "bottom",
+              position: "center",
+              backgroundColor: "#e80404",
+              stopOnFocus: true,
+            }).showToast();
+          }
+        })
+        .catch(function (error) {
           self.handleError(error);
-      });
+        });
     },
 
     filterData() {
@@ -458,17 +446,20 @@ export default {
     searchCategory(id) {
       this.category = id;
     },
-    handleError(res){
-      if((res.data?.status == 'error' && res.data?.message == 'Token expired') || res.response?.status == 401){
-          this.$store.dispatch('main/logout').then((res)=>{
-              this.$router.push({ path: "/" });
-          })
+    handleError(res) {
+      if (
+        (res.data?.status == "error" && res.data?.message == "Token expired") ||
+        res.response?.status == 401
+      ) {
+        this.$store.dispatch("main/logout").then((res) => {
+          this.$router.push({ path: "/" });
+        });
       }
     },
-    getBalance(){
+    getBalance() {
       let self = this;
       self.$store.dispatch("main/getAccount");
-    }
+    },
   },
   watch: {
     filteredData() {
@@ -488,10 +479,10 @@ export default {
 </script>
 
 <style scoped>
-  .shop {
-    height: calc(100% - 70px)
-  }
-  .shop-footer {
-    display: "flex"
-  }
+.shop {
+  height: calc(100% - 70px);
+}
+.shop-footer {
+  display: "flex";
+}
 </style>

@@ -72,6 +72,8 @@ db.payment_web = require('./PaymentWeb.model.js')(sequelize, Sequelize);
 
 db.payment_web.belongsTo(db.user, {foreignKey: 'PayerID'});
 
+db.change_log = require('./ChangeLog.model.js')(sequelize, Sequelize);
+
 //db.event = require('./Event.model.js')(sequelize, Sequelize);
 
 module.exports = db;

@@ -21,6 +21,11 @@ const state = () => {
         pageName: "Support",
         title: "Support"
       },
+      {
+        icon: "HelpCircleIcon",
+        pageName: "wiki",
+        title: "Changelog"
+      },
       "devider",
       {
         icon: "",

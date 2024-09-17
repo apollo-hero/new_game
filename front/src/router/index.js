@@ -15,6 +15,8 @@ import Roulette from '../views/Roulette';
 import Log from '../views/Log';
 import Terms from '../views/Terms';
 import Privacy from '../views/Privacy';
+import Wiki from '../views/Wiki';
+import WikiDetail from '../views/WikiDetail';
 import Register from '../views/Register';
 import Maintanence from '../views/Maintanence';
 import ServerSetting from '../views/ServerSetting';
@@ -126,6 +128,18 @@ const routes = [
     name: "privacy",
     component: Privacy,
     meta: {title: 'Zelda - privacy'}
+  },
+  {
+    path: "/wiki",
+    name: "wiki",
+    component: Wiki,
+    meta: {title: 'Zelda - wiki'}
+  },
+  {
+    path: "/wiki/:id",
+    name: "WikiDetail",
+    component: WikiDetail, // The component that handles the dynamic wiki page
+    meta: {title: 'Zelda - wiki detail'}
   },
   {
     path: "/error-page",

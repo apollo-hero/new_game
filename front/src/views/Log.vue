@@ -72,7 +72,7 @@
                                     <img
                                         alt="item"
                                         v-if="item.description.split('-')[1]"
-                                        :src="require(`@/assets/items/` + item.description.split('-')[1] + `.png`)"
+                                        :src="`/items/` + item.description.split('-')[1] + `.png`"
                                         style="width:36px; height:36px; margin:auto;"
                                     />
                                 </td>
@@ -175,7 +175,7 @@
                                     <img
                                         alt="item"
                                         v-if="item.description.split('-')[1]"
-                                        :src="require(`@/assets/items/` + item.description.split('-')[1] + `.png`)"
+                                        :src="`/items/` + item.description.split('-')[1] + `.png`"
                                         style="width:36px; height:36px; margin:auto;"
                                     />
                                 </td>

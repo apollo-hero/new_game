@@ -179,13 +179,13 @@
                                                 alt="" 
                                                 class="rounded-full" 
                                                 :src="
-                                                    item.Class == 0 && item.Gender == 0 ? `${require('@/assets/items/32000.png')}` :
-                                                    item.Class == 0 && item.Gender == 1 ? `${require('@/assets/items/32020.png')}` :
-                                                    item.Class == 1 && item.Gender == 0 ? `${require('@/assets/items/32040.png')}` :
-                                                    item.Class == 1 && item.Gender == 1 ? `${require('@/assets/items/32060.png')}` :
-                                                    item.Class == 2 && item.Gender == 0 ? `${require('@/assets/items/32080.png')}` :
-                                                    item.Class == 2 && item.Gender == 1 ? `${require('@/assets/items/32100.png')}` :
-                                                    item.Class == 3 && item.Gender == 0 ? `${require('@/assets/items/32120.png')}` : `${require('@/assets/items/32140.png')}`
+                                                    item.Class == 0 && item.Gender == 0 ? '/items/32000.png' :
+                                                    item.Class == 0 && item.Gender == 1 ? `/items/32020.png` :
+                                                    item.Class == 1 && item.Gender == 0 ? '/items/32040.png' :
+                                                    item.Class == 1 && item.Gender == 1 ? '/items/32060.png' :
+                                                    item.Class == 2 && item.Gender == 0 ? '/items/32080.png' :
+                                                    item.Class == 2 && item.Gender == 1 ? '/items/32100.png' :
+                                                    item.Class == 3 && item.Gender == 0 ? '/items/32120.png' : '/items/32140.png'
                                                 "
                                             >
                                         </div>
@@ -290,13 +290,13 @@
                                                 alt="" 
                                                 class="rounded-full" 
                                                 :src="
-                                                    item.Class == 0 && item.Gender == 0 ? `${require('@/assets/items/32000.png')}` :
-                                                    item.Class == 0 && item.Gender == 1 ? `${require('@/assets/items/32020.png')}` :
-                                                    item.Class == 1 && item.Gender == 0 ? `${require('@/assets/items/32040.png')}` :
-                                                    item.Class == 1 && item.Gender == 1 ? `${require('@/assets/items/32060.png')}` :
-                                                    item.Class == 2 && item.Gender == 0 ? `${require('@/assets/items/32080.png')}` :
-                                                    item.Class == 2 && item.Gender == 1 ? `${require('@/assets/items/32100.png')}` :
-                                                    item.Class == 3 && item.Gender == 0 ? `${require('@/assets/items/32120.png')}` : `${require('@/assets/items/32140.png')}`
+                                                    item.Class == 0 && item.Gender == 0 ? '/items/32000.png' :
+                                                    item.Class == 0 && item.Gender == 1 ? '/items/32020.png' :
+                                                    item.Class == 1 && item.Gender == 0 ? '/items/32040.png' :
+                                                    item.Class == 1 && item.Gender == 1 ? '/items/32060.png' :
+                                                    item.Class == 2 && item.Gender == 0 ? '/items/32080.png' :
+                                                    item.Class == 2 && item.Gender == 1 ? '/items/32100.png' :
+                                                    item.Class == 3 && item.Gender == 0 ? '/items/32120.png' : '/items/32140.png'
                                                 "
                                             >
                                         </div>
@@ -402,13 +402,13 @@
                                                 alt="" 
                                                 class="rounded-full" 
                                                 :src="
-                                                    item.Class == 0 && item.Gender == 0 ? `${require('@/assets/items/32000.png')}` :
-                                                    item.Class == 0 && item.Gender == 1 ? `${require('@/assets/items/32020.png')}` :
-                                                    item.Class == 1 && item.Gender == 0 ? `${require('@/assets/items/32040.png')}` :
-                                                    item.Class == 1 && item.Gender == 1 ? `${require('@/assets/items/32060.png')}` :
-                                                    item.Class == 2 && item.Gender == 0 ? `${require('@/assets/items/32080.png')}` :
-                                                    item.Class == 2 && item.Gender == 1 ? `${require('@/assets/items/32100.png')}` :
-                                                    item.Class == 3 && item.Gender == 0 ? `${require('@/assets/items/32120.png')}` : `${require('@/assets/items/32140.png')}`
+                                                    item.Class == 0 && item.Gender == 0 ? '/items/32000.png' :
+                                                    item.Class == 0 && item.Gender == 1 ? '/items/32020.png' :
+                                                    item.Class == 1 && item.Gender == 0 ? '/items/32040.png' :
+                                                    item.Class == 1 && item.Gender == 1 ? '/items/32060.png' :
+                                                    item.Class == 2 && item.Gender == 0 ? '/items/32080.png' :
+                                                    item.Class == 2 && item.Gender == 1 ? '/items/32100.png' :
+                                                    item.Class == 3 && item.Gender == 0 ? '/items/32120.png' : '/items/32140.png'
                                                 "
                                             >
                                         </div>
@@ -755,7 +755,7 @@ export default {
                         character.Class == 2 && character.Gender == 1 ? '32100' :
                         character.Class == 3 && character.Gender == 0 ? '32120' : '32140';
 
-            return require(`@/assets/items/${image}.png`);
+            return `/items/${image}.png`; 
         }
 
      },

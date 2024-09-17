@@ -216,7 +216,7 @@ export default {
                                     t.Class == 2 && t.Gender == 1 ? '32100' :
                                     t.Class == 3 && t.Gender == 0 ? '32120' : '32140';
 
-            return require(`@/assets/items/` + image + `.png`);
+            return `/items/` + image + `.png`;
         },
 
         handleError(res){

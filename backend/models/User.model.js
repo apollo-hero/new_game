@@ -26,7 +26,8 @@ module.exports = (sequelize) => {
             CreatedAt: { type: DataTypes.DATE, defaultValue: new Date() },
             UpdatedAt: { type: DataTypes.DATE, defaultValue: new Date() }, 
             DeletedAt: { type: DataTypes.DATE},
- 
+            VerifyEmail: {type: DataTypes.BOOLEAN, defaultValue: false},
+            payment_method: {type: DataTypes.STRING, defaultValue: 'paypal'}
         }, {
         timestamps: false,
         schema: "accounts"

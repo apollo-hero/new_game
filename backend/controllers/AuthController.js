@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const jwt = require("jsonwebtoken");
 const ResponseData = require('../utils/ResponseData');
 const Models = require('../models');
+const nodemailer = require("nodemailer");
 
 const UserModel = Models.user;
 const CharacterModel = Models.character;
@@ -101,6 +102,8 @@ const login = async (req, res) => {
 
         if (user == null || !user) {
             return ResponseData.warning(res, "Your Email or Password is wrong!");
+        } else if (user && !user.VerifyEmail) {
+            return ResponseData.warning(res, "You don't verify the email. please verify your email first!");
         }
         else {
             
@@ -199,6 +202,31 @@ const register = async (req, res) => {
             user.token = token;
             await user.save();
 
+            const url = `https://${site_data.domain}/auth/verify_email?accessToken=${token}`;
+
+            // SMTP config
+            const transporter = nodemailer.createTransport({
+                host: "mail.smtp2go.com", //
+                port: 465,
+                auth: {
+                user: "ema@epic.dm", // Your Ethereal Email address
+                pass: "cisu7cQvC7uQurt3", // Your Ethereal Email password
+                },
+            });
+
+            let info = await transporter.sendMail({
+                from: '"NosZelda" <support@noszelda.eu>',
+                to: email,
+                subject: "Thank you for your register",
+                text: "Here's a text version of the email.",
+                html: `<h4>Thank you very much for registering for NosZelda this time.</h4>
+                        <h4 style="margin-top: 20px;">Please cooperate with the identity verification by clicking the bellow button".</h4>
+                        <div style="margin: 20px 300px">
+                            <a href="${url}" style="margin: auto; background-color: #666cff; padding: 10px 40px; border-radius: 5px; color: white; text-decoration: none; ">Verify</a>
+                        </div>
+                        <a style="text-decoration: none; margin-top: 20px;" href="#">~~~~~~~~~~~~~~~~~ support@noszelda.eu ~~~~~~~~~~~~~~~~~</a>`,
+              });
+
             const user_data = await UserModel.findOne({
                 where: { Email: email },
             });
@@ -211,7 +239,7 @@ const register = async (req, res) => {
             // Merging the extracted dataValues into a single object
             const data = { ...site_data_values, ...link_data_values };
 
-            return ResponseData.ok(res, 'Register was Succesful. You can now Login.', { token, user: user_data, data: data });
+            return ResponseData.ok(res, 'Register was Succesful. please verify your email.', { token, user: user_data, data: data, verify: info });
         }
     }
     catch (err) {

@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
             login_status: { type: DataTypes.BOOLEAN, defaultValue: true },
             jackpot_status: { type: DataTypes.BOOLEAN, defaultValue: true },
             paypal_email: { type: DataTypes.STRING, defaultValue: '' },
-
+            payment_method: { type: DataTypes.STRING, defaultValue: 'paypal' },
 
         }, {
         timestamps: false,

@@ -73,6 +73,33 @@ router.post(
     GameController.donate
 )
 
+router.get(
+    '/changeLogs',
+    GameController.getChangeLogs
+)
+
+router.get(
+    '/getLogDetail/:id',
+    GameController.getLogDetail
+)
+
+router.post(
+    '/thumbUp',
+    auth,
+    GameController.thumbUp
+)
+
+router.post(
+    '/hot',
+    auth,
+    GameController.hot
+)
+
+router.post(
+    '/crypto_ipn',
+    GameController.crypto_ipn
+)
+
 // router.post(
 //     '/webhook',
 //     GameController.webhook

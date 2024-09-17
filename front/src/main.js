@@ -14,10 +14,12 @@ import 'vue-select/dist/vue-select.css';
 
 Vue.config.productionTip = false;
 
+// Vue.config.devtools = false;
+
 Vue.component('v-select', vSelect)
 
-const baseURL = `https://api.noszelda.eu`;
-// const baseURL = `http://localhost:8000`;
+// const baseURL = `https://api.noszelda.eu`;
+const baseURL = `http://localhost:8000`;
 
 const token = localStorage.getItem('token');
 
@@ -31,6 +33,8 @@ if(!token){
     token: token,
   };
 }
+
+
 
 new Vue({
   router,

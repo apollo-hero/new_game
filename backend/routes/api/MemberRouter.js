@@ -60,4 +60,15 @@ router.post(
     auth,
     MemberController.updatePassword
 )
+
+router.post(
+    '/verify',
+    MemberController.verify
+)
+
+router.post(
+    '/pay_crypto',
+    auth,
+    MemberController.pay_crypto
+)
 module.exports = router;

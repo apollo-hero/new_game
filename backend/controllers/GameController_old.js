@@ -12,7 +12,7 @@ const request = require('request');
  
 const axios = require('axios'); 
 
-const stripe = require('stripe')('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');
+const stripe = require('stripe')('sk_test_51P1NhQP8bC8pI0cCopNmUPCGVEkEIjPY5JZj5eI6hwEWCeGx8eDvRKSDCmpEQjQugfqoj9X1vMik9E9yZFdwYwZy00p9gBZMnm');
  
 const jwt = require('jsonwebtoken'); 
 const { JWT_SECRET_KEY } = require("../config/server.config"); 
@@ -150,7 +150,7 @@ const updateSetting = async (req, res) => {
  
     try { 
         const user = req.user; 
-        if (user == null || user.Authority != 30000) { 
+        if (user == null) { 
             return ResponseData.error(res, 'Not registered token & user',); 
         } 
  
@@ -381,7 +381,7 @@ const getShopItems = async (req, res) => {
         const updatedShopItems = shop_items.map(item => { 
             const filteredDatas = results.filter(t => t.VNUM[0] === item.vnum);
             if(filteredDatas.length > 0){
-                return { price: item.price, category: item.category, vnum: item.vnum, amount: item.amount, categoryId: item.categoryId, name: data_[filteredDatas[0].NAME], desc: data_[filteredDatas[0].ENDNAME]?.replace('[n]', ''), itemType: filteredDatas[0].INDEX[1], itemSubType: filteredDatas[0].INDEX[2], iconId: filteredDatas[0].INDEX[4] }; 
+                return { price: item.price, category: item.category, vnum: item.vnum, amount: item.amount, categoryId: item.categoryId, name: data_[filteredDatas[0].NAME], desc: data_[filteredDatas[0].ENDNAME], itemType: filteredDatas[0].INDEX[1], itemSubType: filteredDatas[0].INDEX[2], iconId: filteredDatas[0].INDEX[4] }; 
             } else {
                 return null;
             }
@@ -403,13 +403,13 @@ const buyItem = async (req, res) => {
             where: { Id: req.user.Id }, 
         }); 
      
-        if(user.Coins < 0 || user.Coins < req.body.totalPrice) { 
-            return ResponseData.ok(res, "You don't have enough coins."); 
+        if( user.Coins < req.body.totalPrice ){ 
+            ResponseData.ok(res, "Your balance is not enough!"); 
         } 
      
         const orderData = req.body.orderData; 
      
-        for(const order of orderData) { 
+        for( const order of orderData ){ 
             const itemId = order.itemId; 
             const quantity = order.quantity; 
             const character = order.character; 
@@ -434,17 +434,18 @@ const buyItem = async (req, res) => {
             let price = shop_item.price; 
             let amount = shop_item.amount; 
             let total_price = price * quantity; 
-
-            if( user.Coins < total_price ){ 
-                return ResponseData.ok(res, "Your balance is not enough!"); 
-            }
      
-            await sendItem(vnum, amount * acum, character, user); 
+            if( user.Coins < total_price ){ 
+                ResponseData.ok(res, "Your balance is not enough!"); 
+            }
+            
+            await sendItem(vnum, amount * acum, character, user);  
      
             user.Coins -= total_price; 
+            
             await user.save();  
      
-            return ResponseData.ok(res, "Thanks for your purchase !"); 
+            ResponseData.ok(res, "Thanks for your purchase!"); 
         } 
     } catch (err) { 
         console.log(err); 
@@ -470,7 +471,7 @@ const sendItem = async (vnum, amount, character, user) => {
      
         // send post request to game server 
      
-        const url = `http://135.125.188.83:24000/player/gift/id/${character}`; // Server webapi
+        const url = `http://135.125.232.78:24000/player/gift/id/${character}`; // Server webapi
      
         const data = { 
             "senderName": "Mall", 
@@ -489,7 +490,7 @@ const sendItem = async (vnum, amount, character, user) => {
         axios.post(url, data, {
                 headers: {
                         'Content-Type': 'application/json',
-                        'X-API-Key': 'mroGYRGOa4PvtBt'
+                        'X-API-Key': '1uc6m7nNCoOMQQGF2pvxjQ=='
                 }
         })
         .then(response => {
@@ -514,7 +515,8 @@ const getWheelItems = async (req, res) => {
             where: { Id: req.user.Id }, 
         }); 
      
-        if(user.Coins < 350) { 
+        // good that we have a variable for that wheel/roulette price kappa 
+        if( user.Coins < 350 ) { 
             ResponseData.warning(res, "Not enough Coins"); 
         } else { 
             if( double_jackpot ){ 
@@ -706,7 +708,7 @@ const convertDate = async ( data ) => {
         const updatedItems = data.map(item => { 
             const filteredDatas = results.filter(t => t.VNUM[0] === item.vnum);
             if(filteredDatas.length > 0){
-                return { id: item.id, rare: item.rare, price: item.price, category: item.category, vnum: item.vnum, amount: item.amount, categoryId: item.categoryId, name: data_[filteredDatas[0].NAME], desc: data_[filteredDatas[0].ENDNAME]?.replace('[n]', ''), itemType: filteredDatas[0].INDEX[1], itemSubType: filteredDatas[0].INDEX[2], iconId: filteredDatas[0].INDEX[4] }; 
+                return { id: item.id, rare: item.rare, price: item.price, category: item.category, vnum: item.vnum, amount: item.amount, categoryId: item.categoryId, name: data_[filteredDatas[0].NAME], desc: data_[filteredDatas[0].ENDNAME], itemType: filteredDatas[0].INDEX[1], itemSubType: filteredDatas[0].INDEX[2], iconId: filteredDatas[0].INDEX[4] }; 
             } else {
                 return null;
             }
@@ -719,19 +721,16 @@ const convertDate = async ( data ) => {
 } 
  
 const getData = async (req, res) => { 
-   try {
-         const links = await LinkModel.findOne({
-              order: [['id', 'ASC']]
-         });
-         const control = await ControlModel.findOne({
-              order: [['id', 'ASC']]
-         });
+    // const links = await LinkModel.findByPk(1); 
+    // const control = await ControlModel.findByPk(1); 
+    const links = await LinkModel.findOne({
+        order: [['id', 'ASC']]
+    });
+    const control = await ControlModel.findOne({
+        order: [['id', 'ASC']]
+    });
  
-         ResponseData.ok(res, "Game Data", { discord: links?.discord, elite: links?.elite, inforge: links?.inforge, ragezone: links?.ragezone, name: control.name, captcha_key: control.captcha_key }); 
-    }  catch(e) { 
-        console.error(e, "getdata error");  
-    }
-    
+    ResponseData.ok(res, "Game Data", { discord: links?.discord, elite: links?.elite, inforge: links?.inforge, ragezone: links?.ragezone, name: control.name, captcha_key: control.captcha_key }); 
 } 
  
 const getJackpots = async (req, res) => { 
@@ -757,7 +756,7 @@ const sendWheelItem = async (vnum, amount, character, user) => {
             description: description 
         }); 
     
-        const url = 'http://135.125.188.83:24000/player/gift/id/' + character;  // Server IP
+        const url = 'http://135.125.232.78:24000/player/gift/id/' + character;  // Server IP
     
         const data = { 
             "senderName": "Mall", 
@@ -779,6 +778,9 @@ const sendWheelItem = async (vnum, amount, character, user) => {
             }, 
         }; 
     
+        axios.defaults.headers.common = { 
+        "X-API-Key": "1uc6m7nNCoOMQQGF2pvxjQ==", 
+        }; 
     
         axios.post(url, data, config) 
         .then(response => { 
@@ -798,10 +800,6 @@ const ipnVerify = async (req, res) => {
 	//res.status(200).send(req.body.item_name); 
         //res.end(); 
  
-    console.log('*********************************  ipn test ************************', req.body)
-
-    console.log(req.header('x-forwarded-for') || req.socket.remoteAddress)
-
     const body = req.body || {}; 
  
     const site_data = await ControlModel.findOne({
@@ -810,21 +808,6 @@ const ipnVerify = async (req, res) => {
  
     // Validate IPN message with PayPal 
     try { 
-
-        const fs = require('fs');
-
-        function logMessage(message) {
-            const log = `${new Date().toISOString()} - ${message}\n`;
-
-            // Append the log message to xxx.log
-            fs.appendFile('ipn.log', log, (err) => {
-                if (err) throw err;
-                console.log('Log saved to xxx.log');
-            });
-        }
-
-        // Example usage
-        logMessage(JSON.stringify(req.body));
       //const isValidated = await verifyPaypalIPN(body); 
  
         const myPost = req.body; 
@@ -833,21 +816,33 @@ const ipnVerify = async (req, res) => {
             reqString += `&${key}=${encodeURIComponent(value)}`; 
         } 
  
+        // res.status(200).send(reqString); 
+    	// res.end(); 
+ 
         reqString = reqString.replace(/%20/g, '+'); 
         reqString = reqString.replace(/%2B/g, '+'); 
 
-        //res.status(200).send(reqString); 
-    	//res.end(); 
-        //return
- 
-        //reqString = 'cmd=_notify-validate&mc_gross=100.00&protection_eligibility=Eligible&payer_id=V9UKC9JFWVYSG&payment_date=15%3A11%3A06+Sep+11%2C+2024+PDT&payment_status=Completed&charset=UTF-8&first_name=deniz&mc_fee=3.75&notify_version=3.9&custom=213&payer_status=verified&business=mirelaburchea%40yahoo.com&quantity=1&verify_sign=A6b-71blajTVe4s.SN3lRfNZx-06AoAWnVpy5hHagKOIAvFWe2YdIkWk&payer_email=elif.basci%40gmx.de&txn_id=8BV7460150686525T&payment_type=instant&last_name=Basci&receiver_email=mirelaburchea%40yahoo.com&payment_fee=&shipping_discount=0.00&receiver_id=7QB457CVQQ7JS&insurance_amount=0.00&txn_type=web_accept&item_name=Digital+Coins&discount=0.00&mc_currency=EUR&item_number=&residence_country=DE&shipping_method=Default&transaction_subject=213&payment_gross=&ipn_track_id=f2010057b9e33'
+        console.log(req.body)
 
+        console.log("cmd=_notify-validate&" + new URLSearchParams(req.body).toString())
+
+        console.log(reqString == "cmd=_notify-validate&" + new URLSearchParams(req.body).toString())
+
+        // reqString = "cmd=_notify-validate&mc_gross=100.00&protection_eligibility=Eligible&payer_id=GLN8962WSPQT6&payment_date=15%3A45%3A00+Sep+13%2C+2024+PDT&payment_status=Completed&charset=UTF-8&first_name=Ismael&mc_fee=5.04&notify_version=3.9&custom=68&payer_status=verified&business=mirelaburchea%40yahoo.com&quantity=1&verify_sign=AFcgNMoIWzUsXtQnVR6GlzV3rD2dA9xwQC7Ux2CfXnc.1.GWczxYXZpF&payer_email=registroisma%40gmail.com&txn_id=8T468693HK5062018&payment_type=instant&last_name=Campos&receiver_email=mirelaburchea%40yahoo.com&payment_fee=&shipping_discount=0.00&receiver_id=7QB457CVQQ7JS&insurance_amount=0.00&txn_type=web_accept&item_name=Digital+Coins&discount=0.00&mc_currency=EUR&item_number=7&residence_country=GB&shipping_method=Default&transaction_subject=68&payment_gross=&ipn_track_id=f9000857367bf";
+ 
         // Make a POST request to PayPal to validate IPN 
+        // const { data: verificationResult } = await axios.post('https://ipnpb.sandbox.paypal.com/cgi-bin/webscr', "cmd=_notify-validate&" + new URLSearchParams(req.body).toString(), { 
+        //     headers: { 
+        //         'Content-Type': 'application/x-www-form-urlencoded', 
+        //     }, 
+        // }); 
+
+
         const { data: verificationResult } = await axios.post('https://ipnpb.paypal.com/cgi-bin/webscr', reqString, { 
-            headers: { 
-                'Content-Type': 'application/x-www-form-urlencoded', 
-            }, 
-        }); 
+                headers: { 
+                    'Content-Type': 'application/x-www-form-urlencoded', 
+                }, 
+            }); 
  
  
       if (verificationResult != "VERIFIED" ) { 
@@ -858,103 +853,86 @@ const ipnVerify = async (req, res) => {
         return; 
       } 
  
-	    //res.status(200).send('Verified IPN message'); 
-        //res.end(); 
+        console.log("verified")
+	    res.status(200).send('Verified IPN message'); 
+        res.end(); 
        
       // IPN Message is validated! 
        
-      const item_name = body.item_name; 
-      const item_number = body.item_number; 
-      const payment_status = body.payment_status; 
-      const payment_amount = body.mc_gross; 
-      const payment_currency = body.mc_currency; 
-      const txn_id = body.txn_id; 
-      const receiver_email = body.receiver_email; 
-      const payer_email = body.payer_email; 
-      const real_curr = payment_currency.substring(0, 8); 
-      const custom = body.custom; 
+    //   const item_name = body.item_name; 
+    //   const item_number = body.item_number; 
+    //   const payment_status = body.payment_status; 
+    //   const payment_amount = body.mc_gross; 
+    //   const payment_currency = body.mc_currency; 
+    //   const txn_id = body.txn_id; 
+    //   const receiver_email = body.receiver_email; 
+    //   const payer_email = body.payer_email; 
+    //   const real_curr = payment_currency.substring(0, 8); 
+    //   const custom = body.custom; 
 
-      if( decodeURIComponent(receiver_email) != "mirelaburchea@yahoo.com" ) { 
-        console.log("not right email");
-        res.status(200).send("FAILED/E"); 
-    	res.end(); 
-        return 
-      } 
+    //   if( receiver_email != "noszelda@gmail.com" ) { 
+    //     res.status(200).send('Failed-E'); 
+    //     res.end(); 
+    //     return; 
+    //   } 
  
-      if( real_curr != "EUR" ) { 
-        const paymentWeb = await PaymentWebModel.create({ 
-            TransactionID: txn_id, 
-            PayerEmail: payer_email, 
-            PayerID: custom, 
-            Description: "FAILED", 
-            Amount: payment_amount, 
-            Currency: real_curr 
-        }); 
+    //   if( real_curr != "EUR" ) { 
+    //     const paymentWeb = await PaymentWebModel.create({ 
+    //         TransactionID: txn_id, 
+    //         PayerEmail: payer_email, 
+    //         PayerID: custom, 
+    //         Description: "FAILED", 
+    //         Amount: payment_amount, 
+    //         Currency: real_curr 
+    //     }); 
  
-        console.log("not euro");
-        res.status(200).send("FAILED/C"); 
-    	res.end(); 
-        return; 
-      }  
+    //     res.status(200).send('Failed-C'); 
+    //     res.end();
+    //     return; 
+    //   }  
  
-      if( isNaN(item_number) ) { 
-        console.log("not a number");
-        res.status(200).send("FAILED/N"); 
-    	res.end(); 
-        return; 
-      } 
-
-      const check = await PaymentWebModel.findOne({ where: { TransactionID : txn_id }})
-
-      if(check) {
-        console.log("already processed");
-        res.status(200).send("already processed!"); 
-    	res.end(); 
-        return
-      }
+    //   if( isNaN(item_number) ) { 
+    //     res.status(200).send('Failed-N'); 
+    //     res.end();
+    //     return; 
+    //   } 
  
-      const coins_info = await CoinModel.findOne({ where: { CoinId : item_number}}); 
-      if( coins_info !== null) { 
+    //   const coins_info = await CoinModel.findOne({ where: { CoinId : item_number}}); 
+    //   if( coins_info !== null) { 
  
-        const newCoins = bonus( coins_info.Coins, coins_info.BonusCoins, site_data.coin_bonus ); 
+    //     const newCoins = bonus( coins_info.Coins, coins_info.BonusCoins, site_data.coin_bonus ); 
  
-        const payment_process = await PaymentWebModel.create({ 
-            TransactionID: txn_id, 
-            PayerEmail: payer_email, 
-            PayerID: custom, 
-            Description: item_name, 
-            Amount: parseInt(payment_amount), 
-            Currency: real_curr 
-        }); 
+    //     const payment_process = await PaymentWebModel.create({ 
+    //         TransactionID: txn_id, 
+    //         PayerEmail: payer_email, 
+    //         PayerID: custom, 
+    //         Description: item_name, 
+    //         Amount: parseInt(payment_amount), 
+    //         Currency: real_curr 
+    //     }); 
  
-        const disAmount = discount(coins_info.Price, site_data.coin_discount); 
+    //     const disAmount = discount(coins_info.Price, site_data.coin_discount); 
  
-        if( disAmount != payment_amount ) { 
-            console.log("amount mismatch");
-            res.status(200).send("FAILED/A"); 
-            res.end(); 
-            return;
-        } 
+    //     if( disAmount != payment_amount ) { 
+    //         res.status(200).send('Failed-A'); 
+    //         res.end();
+    //         return; 
+    //     } 
  
-        const user = await UserModel.findOne({ 
-            where: { Id: custom }, 
-        }); 
+    //     const user = await UserModel.findOne({ 
+    //         where: { Id: custom }, 
+    //     }); 
  
-        const update = await user.update({ Coins: user.Coins + newCoins }); 
-
-        res.status(200).send("Success"); 
-    	res.end(); 
-        return;
+    //     const update = await user.update({ Coins: user.Coins + newCoins }); 
  
-      }  
+    //   }  
  
     } catch(e) { 
       console.error(e);  
-      res.status(200).send("ipn error!"); 
+      res.status(200).send('Verified IPN Error'); 
       res.end(); 
-      return
     } 
-}
+} 
  
 const bonus = (amount, default_bonus, percent) => { 
     if( percent > 0 ) { 
@@ -988,96 +966,121 @@ const wheelItems = async (req, res) => {
     } 
 } 
 
- const donate = async (req, res) => {
-     const coinId = req.body.coinId;
-     const user_id = req.body.customer_id;
+const donate = async (req, res) => {
+    
+    const coinId = req.body.coinId;
+    const user_id = req.body.customer_id;
 
-     const coins_info = await CoinModel.findOne({ where: { CoinId : coinId}}); 
+    const coins_info = await CoinModel.findOne({ where: { CoinId : coinId}}); 
 
-     const site_data = await ControlModel.findByPk(1);
+    const site_data = await ControlModel.findByPk(1);
 
-     const amount = coins_info.Price * (1 - site_data.coin_discount/100)
+    const amount = coins_info.Price * (1 - site_data.coin_discount/100)
 
-     const session = await stripe.checkout.sessions.create({
-         payment_method_types: ['card'],
-         line_items: [{
-             price_data: {
-               currency: 'eur',
-               product_data: {
-                 name: 'Digital Coins',
-                 description: coinId
-               },
-               unit_amount: amount * 100,
-             },
-             quantity: 1,
-           }],
-         metadata: {
-             customer_id: user_id,
-             coinId: coinId
-         },
-         mode: 'payment',
-         success_url: `https://nosmytxh.com/donate?success=success`, // https://nosmytxh.com/donate?success=success
-         cancel_url: `https://nosmytxh.com/donate?success=cancel`, // https://nosmytxh.com/donate?success=cancel
-       });// http://localhost:8080/donate?success=cancel // http://localhost:8080/donate?success=success
+    const session = await stripe.checkout.sessions.create({
+        // payment_method_types: ['card','bancontact','ideal','eps'],
+        line_items: [{
+            price_data: {
+              currency: 'eur',
+              product_data: {
+                name: 'Sever Donation',
+                description: coinId
+              },
+              unit_amount: amount * 100,
+            },
+            quantity: 1,
+          }],
+        metadata: {
+            customer_id: user_id,
+            coinId: coinId
+        },
+        mode: 'payment',
+        success_url: `http://localhost:8080/donate?success=success`, // https://noszelda.eu/donate?success=success
+        cancel_url: `http://localhost:8080/donate?success=cancel`, // https://noszelda.eu/donate?success=cancel
+      });// http://localhost:8080/donate?success=cancel // http://localhost:8080/donate?success=success
      
-     ResponseData.ok(res, "OK", { url: session.url }); 
- }
+    ResponseData.ok(res, "OK", { url: session.url }); 
+}
 
 const webhook = async (req, res) => {
-    const endpointSecret = 'whsec_pZIzD3jS57kuYJGFC4lsvDpa7GxTXKYG';
+
+    const endpointSecret = 'whsec_b703ee814b13ef94e2297f1113e41d6ae93b326fee02c4d17968b5c924b204bf'; // Webhook Secret
+
     const sig = req.headers['stripe-signature'];
+
     let event;
+
+    console.log("-------------------------------------------------");
 
     try {
         event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
 
+        // Handle the checkout.session.completed event
         if (event.type === 'checkout.session.completed') {
+            // Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
             const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
-                event.data.object.id,
-                { expand: ['line_items'] }
+            event.data.object.id,
+            {
+                expand: ['line_items'],
+            }
             );
 
-            const paymentIntent = await stripe.paymentIntents.retrieve(sessionWithLineItems.payment_intent);
-            if (paymentIntent.status !== 'succeeded') {
-                console.log('Payment not successful:', paymentIntent.status);
-                return ResponseData.error(res, 'Payment not successful');
+            console.log('################################',sessionWithLineItems);
+
+            const lineItems = sessionWithLineItems.line_items;
+
+            // Fulfill the purchase...
+            // console.log('=====================================',sessionWithLineItems, lineItems);
+
+            const check = await PaymentWebModel.findOne({where: {TransactionID: sessionWithLineItems.id}});
+
+            if(check) {
+                return;
             }
 
-            const check = await PaymentWebModel.findOne({ where: { TransactionID: sessionWithLineItems.id } });
-            if (check) return;
+            const site_data = await ControlModel.findOne({
+                order: [['id', 'ASC']]
+            });            
 
-            const site_data = await ControlModel.findOne({ order: [['id', 'ASC']] });
+            const item_number = sessionWithLineItems.metadata.coinId;
 
-            const paymentAmount = sessionWithLineItems.amount_total / 100;
-            const coins_info = await CoinModel.findOne({ where: { Price: paymentAmount } });
-
-            if (coins_info !== null) {
-                const newCoins = bonus(coins_info.Coins, coins_info.BonusCoins, site_data.coin_bonus);
-
-                await PaymentWebModel.create({
-                    TransactionID: sessionWithLineItems.id,
-                    PayerEmail: sessionWithLineItems.customer_details.email,
-                    PayerID: sessionWithLineItems.metadata.customer_id,
-                    Description: 'Digital Coins',
-                    Amount: paymentAmount,
-                    Currency: sessionWithLineItems.currency
-                });
-
-                const disAmount = discount(coins_info.Price, site_data.coin_discount);
-                if (disAmount != paymentAmount) return;
-
-                const user = await UserModel.findOne({ where: { Id: sessionWithLineItems.metadata.customer_id } });
-                await user.update({ Coins: user.Coins + newCoins });
-            }
+            const coins_info = await CoinModel.findOne({ where: { CoinId : item_number}}); 
+            if( coins_info !== null) { 
+        
+                const newCoins = bonus( coins_info.Coins, coins_info.BonusCoins, site_data.coin_bonus ); 
+        
+                const payment_process = await PaymentWebModel.create({ 
+                    TransactionID: sessionWithLineItems.id, 
+                    PayerEmail: sessionWithLineItems.customer_details.email, 
+                    PayerID: sessionWithLineItems.metadata.customer_id, 
+                    Description: 'sever donation', 
+                    Amount: parseInt(sessionWithLineItems.amount_total/100), 
+                    Currency: sessionWithLineItems.currency 
+                }); 
+        
+                const disAmount = discount(coins_info.Price, site_data.coin_discount); 
+        
+                if( disAmount != sessionWithLineItems.amount_total/100 ) { 
+                    return; 
+                } 
+        
+                const user = await UserModel.findOne({ 
+                    where: { Id: sessionWithLineItems.metadata.customer_id }, 
+                }); 
+        
+                const update = await user.update({ Coins: user.Coins + newCoins }); 
+        
+            } 
         }
 
-        ResponseData.ok(res, "OK");
-    } catch (err) {
-        console.log('errr', err);
-        return ResponseData.error(res, "", err);
+        ResponseData.ok(res, "OK"); 
     }
-};
-
+    catch (err) {
+        console.log('errr', err);
+        return ResponseData.error(res, "", err); 
+    }
+}
+ 
 const getChangeLogs = async (req, res) => { 
     try {
         const logs = await ChangeLogModel.findAll({
@@ -1172,7 +1175,7 @@ const hot = async (req, res) => {
         return ResponseData.error(res, "", err); 
       } 
 } 
- 
+
 const crypto_ipn = async (req, res) => {
 
     try {
@@ -1198,7 +1201,7 @@ const crypto_ipn = async (req, res) => {
         if(sig == signature) {
             const check = await PaymentWebModel.findOne({where: {TransactionID: req.body.payment_id.toString()}});
     
-            if(check || req.body.payment_status != "finished") {
+            if(check) {
                 return;
             }
     
@@ -1215,21 +1218,21 @@ const crypto_ipn = async (req, res) => {
     
                 const user_info = await UserModel.findOne({ where: { Id : parseInt(req.body.order_id)}}); 
         
+                const payment_process = await PaymentWebModel.create({ 
+                    TransactionID: req.body.payment_id, 
+                    PayerEmail: user_info.Email, 
+                    PayerID: req.body.order_id, 
+                    Description: 'sever donation', 
+                    Amount: parseInt(req.body.price_amount), 
+                    Currency: req.body.price_currency,
+                    Method: "crypto"
+                }); 
+        
                 const disAmount = discount(coins_info.Price, site_data.coin_discount); 
         
                 if( disAmount != req.body.price_amount ) { 
                     return; 
                 } 
-
-                const payment_process = await PaymentWebModel.create({ 
-                    TransactionID: req.body.payment_id, 
-                    PayerEmail: user_info.Email, 
-                    PayerID: req.body.order_id, 
-                    Description: 'Digital Coins', 
-                    Amount: parseInt(req.body.price_amount), 
-                    Currency: req.body.price_currency,
-                    Method: "crypto"
-                }); 
         
                 const user = await UserModel.findOne({ 
                     where: { Id: req.body.order_id }, 
